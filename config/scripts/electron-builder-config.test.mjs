@@ -67,17 +67,48 @@ describe('electron-builder config', () => {
 
   it('builds RPMs without changing existing Linux artifact names', () => {
     expect(electronBuilderConfig.linux.target).toEqual(['AppImage', 'deb', 'rpm'])
-    expect(electronBuilderConfig.appImage.artifactName).toBe('orca-linux.${ext}')
-    expect(electronBuilderConfig.deb.artifactName).toBe('orca-ide_${version}_${arch}.${ext}')
+    expect(electronBuilderConfig.appImage.artifactName).toBe('orca-china-linux.${ext}')
+    expect(electronBuilderConfig.deb.artifactName).toBe('orca-china_${version}_${arch}.${ext}')
     expect(electronBuilderConfig.rpm).toMatchObject({
-      packageName: 'orca-ide',
-      artifactName: 'orca-ide-${version}.${arch}.${ext}'
+      packageName: 'orca-china',
+      artifactName: 'orca-china-${version}.${arch}.${ext}'
     })
+  })
+
+  it('uses separate localized app identity and CLI launcher assets', () => {
+    expect(electronBuilderConfig.appId).toBe('com.stablyai.orca-china')
+    expect(electronBuilderConfig.productName).toBe('Orca China')
+    expect(electronBuilderConfig.win.executableName).toBe('Orca China')
+    expect(electronBuilderConfig.win.extraResources).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          from: 'resources/win32/bin/orca-china.cmd',
+          to: 'bin/orca-china.cmd'
+        })
+      ])
+    )
+    expect(electronBuilderConfig.mac.extraResources).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          from: 'resources/darwin/bin/orca-china',
+          to: 'bin/orca-china'
+        })
+      ])
+    )
+    expect(electronBuilderConfig.linux.executableName).toBe('orca-china')
+    expect(electronBuilderConfig.linux.extraResources).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          from: 'resources/linux/bin/orca-china',
+          to: 'bin/orca-china'
+        })
+      ])
+    )
   })
 
   it('uses Orca native rebuild hook instead of electron-builder default rebuild', () => {
     expect(electronBuilderConfig.beforeBuild).toBe(electronBuilderNativeRebuild)
-    expect(electronBuilderConfig.npmRebuild).toBe(true)
+    expect(electronBuilderConfig.npmRebuild).toBe(false)
   })
 
   it('verifies packaged main runtime deps from Windows-style asar entries', async () => {
@@ -201,7 +232,7 @@ describe('electron-builder config', () => {
       const root = await mkdtemp(join(tmpdir(), 'orca-electron-builder-config-'))
       try {
         const resourcesDir = join(root, 'linux-unpacked', 'resources')
-        const launcherPath = join(resourcesDir, 'bin', 'orca-ide')
+        const launcherPath = join(resourcesDir, 'bin', 'orca-china')
         await mkdir(join(resourcesDir, 'bin'), { recursive: true })
         await mkdir(join(resourcesDir, 'node_modules', 'zod', 'src'), { recursive: true })
         await writeFile(launcherPath, '#!/usr/bin/env bash\n', { encoding: 'utf8', mode: 0o644 })

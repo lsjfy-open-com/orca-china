@@ -10,19 +10,19 @@ export function getRequiredReleaseAssetNames(tag) {
     'latest-linux.yml',
     'latest-mac.yml',
     'latest.yml',
-    'orca-linux.AppImage',
-    `orca-ide_${version}_amd64.deb`,
-    `orca-ide-${version}.x86_64.rpm`,
-    'orca-windows-setup.exe',
-    'orca-windows-setup.exe.blockmap',
+    'orca-china-linux.AppImage',
+    `orca-china_${version}_amd64.deb`,
+    `orca-china-${version}.x86_64.rpm`,
+    'orca-china-windows-setup.exe',
+    'orca-china-windows-setup.exe.blockmap',
     `Orca-${version}-mac.zip`,
     `Orca-${version}-mac.zip.blockmap`,
     `Orca-${version}-arm64-mac.zip`,
     `Orca-${version}-arm64-mac.zip.blockmap`,
-    'orca-macos-x64.dmg',
-    'orca-macos-x64.dmg.blockmap',
-    'orca-macos-arm64.dmg',
-    'orca-macos-arm64.dmg.blockmap'
+    'orca-china-macos-x64.dmg',
+    'orca-china-macos-x64.dmg.blockmap',
+    'orca-china-macos-arm64.dmg',
+    'orca-china-macos-arm64.dmg.blockmap'
   ]
 }
 

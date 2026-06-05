@@ -34,6 +34,7 @@ import type { LucideProps } from 'lucide-react'
 import logo from '../../../../resources/logo.svg'
 import type { Repo } from '../../../shared/types'
 import { getRepoKindLabel } from '../../../shared/repo-kind'
+import { t } from '../../../shared/i18n'
 import { useAppStore } from '@/store'
 import { isMacUserAgent, isWindowsUserAgent } from '@/components/terminal-pane/pane-helpers'
 import type { SettingsNavSection } from '@/lib/settings-navigation-types'
@@ -117,16 +118,16 @@ export function buildSettingsNavigationMetadata({
     // order — keep each new entry beside its group's siblings.
     {
       id: 'agents',
-      title: 'Agents',
-      description: 'Manage AI agents, set a default, and customize commands.',
+      title: t('settingsNav.panels.agents.title'),
+      description: t('settingsNav.panels.agents.description'),
       icon: Bot,
       searchEntries: AGENTS_PANE_SEARCH_ENTRIES,
       group: 'capabilities'
     },
     {
       id: 'accounts',
-      title: 'AI Provider Accounts',
-      description: 'Optional account switching for Claude, Codex, Gemini, and OpenCode Go.',
+      title: t('settingsNav.panels.accounts.title'),
+      description: t('settingsNav.panels.accounts.description'),
       icon: UserCog,
       searchEntries: ACCOUNTS_PANE_SEARCH_ENTRIES,
       group: 'capabilities',
@@ -134,8 +135,8 @@ export function buildSettingsNavigationMetadata({
     },
     {
       id: 'orchestration',
-      title: 'Orchestration',
-      description: 'Coordinate multiple coding agents through Orca.',
+      title: t('settingsNav.panels.orchestration.title'),
+      description: t('settingsNav.panels.orchestration.description'),
       icon: Network,
       searchEntries: ORCHESTRATION_PANE_SEARCH_ENTRIES,
       group: 'capabilities'
@@ -144,16 +145,16 @@ export function buildSettingsNavigationMetadata({
       ? [
           {
             id: 'computer-use',
-            title: 'Computer Use',
-            description: 'Enable agents to control any app on your computer.',
+            title: t('settingsNav.panels.computer-use.title'),
+            description: t('settingsNav.panels.computer-use.description'),
             icon: MousePointerClick,
             searchEntries: COMPUTER_USE_PANE_SEARCH_ENTRIES,
             group: 'capabilities'
           },
           {
             id: 'voice',
-            title: 'Voice',
-            description: 'Local speech-to-text dictation with on-device models.',
+            title: t('settingsNav.panels.voice.title'),
+            description: t('settingsNav.panels.voice.description'),
             icon: Mic,
             searchEntries: VOICE_PANE_SEARCH_ENTRIES,
             group: 'capabilities'
@@ -162,12 +163,12 @@ export function buildSettingsNavigationMetadata({
       : []),
     {
       id: 'setup-guide',
-      title: 'Onboarding checklist',
-      description: 'Finish the onboarding checklist for core Orca workflows.',
+      title: t('settingsNav.panels.setup-guide.title'),
+      description: t('settingsNav.panels.setup-guide.description'),
       icon: OrcaLogoSettingsIcon,
       searchEntries: [
         {
-          title: 'Onboarding checklist',
+          title: t('settingsNav.panels.setup-guide.title'),
           description: 'Open the onboarding checklist for setup and milestone steps.',
           keywords: ['setup guide', 'get started with Orca', 'getting started']
         }
@@ -176,24 +177,24 @@ export function buildSettingsNavigationMetadata({
     },
     {
       id: 'general',
-      title: 'General',
-      description: 'Workspace defaults, app setup, and maintenance.',
+      title: t('settingsNav.panels.general.title'),
+      description: t('settingsNav.panels.general.description'),
       icon: SlidersHorizontal,
       searchEntries: GENERAL_PANE_SEARCH_ENTRIES,
       group: 'setup'
     },
     {
       id: 'integrations',
-      title: 'Integrations',
-      description: 'Connect GitHub, GitLab, Linear, and source-hosting services.',
+      title: t('settingsNav.panels.integrations.title'),
+      description: t('settingsNav.panels.integrations.description'),
       icon: Blocks,
       searchEntries: INTEGRATIONS_PANE_SEARCH_ENTRIES,
       group: 'setup'
     },
     {
       id: 'git',
-      title: 'Git & Source Control',
-      description: 'Branch naming, base refs, attribution, and AI commit messages.',
+      title: t('settingsNav.panels.git.title'),
+      description: t('settingsNav.panels.git.description'),
       icon: GitBranch,
       // Why: the AI commit messages pane is rendered inside Git, so shared
       // metadata must search both surfaces wherever Git appears.
@@ -202,24 +203,24 @@ export function buildSettingsNavigationMetadata({
     },
     {
       id: 'tasks',
-      title: 'Task Sources',
-      description: 'Choose which task providers appear in the Tasks page and sidebar.',
+      title: t('settingsNav.panels.tasks.title'),
+      description: t('settingsNav.panels.tasks.description'),
       icon: ListChecks,
       searchEntries: TASKS_PANE_SEARCH_ENTRIES,
       group: 'workflows'
     },
     {
       id: 'terminal',
-      title: 'Terminal',
-      description: 'Shells, renderer, sessions, and terminal behavior.',
+      title: t('settingsNav.panels.terminal.title'),
+      description: t('settingsNav.panels.terminal.description'),
       icon: SquareTerminal,
       searchEntries: terminalPaneSearchEntries,
       group: 'workflows'
     },
     {
       id: 'quick-commands',
-      title: 'Quick Commands',
-      description: 'Saved terminal commands, scoped globally or per project.',
+      title: t('settingsNav.panels.quick-commands.title'),
+      description: t('settingsNav.panels.quick-commands.description'),
       icon: Play,
       searchEntries: QUICK_COMMANDS_PANE_SEARCH_ENTRIES,
       group: 'workflows'
@@ -228,8 +229,8 @@ export function buildSettingsNavigationMetadata({
       ? [
           {
             id: 'browser',
-            title: 'Browser',
-            description: 'Home page, link routing, and session cookies.',
+            title: t('settingsNav.panels.browser.title'),
+            description: t('settingsNav.panels.browser.description'),
             icon: Globe,
             searchEntries: BROWSER_PANE_SEARCH_ENTRIES,
             group: 'workflows'
@@ -238,24 +239,24 @@ export function buildSettingsNavigationMetadata({
       : []),
     {
       id: 'floating-workspace',
-      title: 'Floating Workspace',
-      description: 'Global terminal, browser, and markdown tabs.',
+      title: t('settingsNav.panels.floating-workspace.title'),
+      description: t('settingsNav.panels.floating-workspace.description'),
       icon: PanelsTopLeft,
       searchEntries: FLOATING_WORKSPACE_SEARCH_ENTRIES,
       group: 'workflows'
     },
     {
       id: 'appearance',
-      title: 'Appearance',
-      description: 'Theme, zoom, app and terminal appearance, sidebars, and status bar.',
+      title: t('settingsNav.panels.appearance.title'),
+      description: t('settingsNav.panels.appearance.description'),
       icon: Palette,
       searchEntries: APPEARANCE_PANE_SEARCH_ENTRIES,
       group: 'interface'
     },
     {
       id: 'input',
-      title: 'Input & Editing',
-      description: 'Selection and editing behavior.',
+      title: t('settingsNav.panels.input.title'),
+      description: t('settingsNav.panels.input.description'),
       icon: TextCursorInput,
       searchEntries: INPUT_PANE_SEARCH_ENTRIES,
       group: 'interface'
@@ -264,8 +265,8 @@ export function buildSettingsNavigationMetadata({
       ? [
           {
             id: 'notifications',
-            title: 'Notifications',
-            description: 'Native desktop notifications for agent and terminal events.',
+            title: t('settingsNav.panels.notifications.title'),
+            description: t('settingsNav.panels.notifications.description'),
             icon: Bell,
             searchEntries: NOTIFICATIONS_PANE_SEARCH_ENTRIES,
             group: 'interface'
@@ -274,26 +275,26 @@ export function buildSettingsNavigationMetadata({
       : []),
     {
       id: 'shortcuts',
-      title: 'Shortcuts',
-      description: 'Keyboard shortcuts for common actions.',
+      title: t('settingsNav.panels.shortcuts.title'),
+      description: t('settingsNav.panels.shortcuts.description'),
       icon: Keyboard,
       searchEntries: SHORTCUTS_PANE_SEARCH_ENTRIES,
       group: 'interface'
     },
     {
       id: 'stats',
-      title: 'Stats & Usage',
-      description: 'Orca stats plus Claude, Codex, and OpenCode usage analytics.',
+      title: t('settingsNav.panels.stats.title'),
+      description: t('settingsNav.panels.stats.description'),
       icon: BarChart3,
       searchEntries: STATS_PANE_SEARCH_ENTRIES,
       group: 'interface'
     },
     {
       id: 'servers',
-      title: 'Remote Orca Servers',
+      title: t('settingsNav.panels.servers.title'),
       description: isWebClient
-        ? 'Connect this browser to a saved Orca server.'
-        : 'Switch between local desktop mode and paired remote Orca runtimes.',
+        ? t('settingsNav.panels.servers.descriptionWeb')
+        : t('settingsNav.panels.servers.descriptionDesktop'),
       icon: Server,
       searchEntries: [runtimeEnvironmentsSearchEntry],
       group: 'remote',
@@ -303,16 +304,16 @@ export function buildSettingsNavigationMetadata({
       ? [
           {
             id: 'ssh',
-            title: 'SSH Hosts',
-            description: 'Remote SSH hosts for files, terminals, and git.',
+            title: t('settingsNav.panels.ssh.title'),
+            description: t('settingsNav.panels.ssh.description'),
             icon: Cable,
             searchEntries: SSH_PANE_SEARCH_ENTRIES,
             group: 'remote'
           },
           {
             id: 'mobile',
-            title: 'Mobile',
-            description: 'Control terminals and agents from your phone.',
+            title: t('settingsNav.panels.mobile.title'),
+            description: t('settingsNav.panels.mobile.description'),
             icon: Smartphone,
             searchEntries: MOBILE_SETTINGS_PANE_SEARCH_ENTRIES,
             group: 'remote'
@@ -323,8 +324,8 @@ export function buildSettingsNavigationMetadata({
       ? [
           {
             id: 'developer-permissions',
-            title: 'macOS Permissions',
-            description: 'macOS privacy access for terminal-launched developer tools.',
+            title: t('settingsNav.panels.developer-permissions.title'),
+            description: t('settingsNav.panels.developer-permissions.description'),
             icon: ShieldCheck,
             searchEntries: DEVELOPER_PERMISSIONS_PANE_SEARCH_ENTRIES,
             group: 'security'
@@ -333,8 +334,8 @@ export function buildSettingsNavigationMetadata({
       : []),
     {
       id: 'privacy',
-      title: 'Privacy & Telemetry',
-      description: 'Anonymous usage data and telemetry controls.',
+      title: t('settingsNav.panels.privacy.title'),
+      description: t('settingsNav.panels.privacy.description'),
       icon: Lock,
       searchEntries: PRIVACY_PANE_SEARCH_ENTRIES,
       group: 'security'
@@ -343,8 +344,8 @@ export function buildSettingsNavigationMetadata({
       ? [
           {
             id: 'advanced',
-            title: 'Advanced',
-            description: 'Low-level compatibility settings for troubleshooting.',
+            title: t('settingsNav.panels.advanced.title'),
+            description: t('settingsNav.panels.advanced.description'),
             icon: Wrench,
             searchEntries: ADVANCED_PANE_SEARCH_ENTRIES,
             group: 'advanced'
@@ -353,8 +354,8 @@ export function buildSettingsNavigationMetadata({
       : []),
     {
       id: 'experimental',
-      title: 'Experimental',
-      description: 'New features that are still taking shape. Give them a try.',
+      title: t('settingsNav.panels.experimental.title'),
+      description: t('settingsNav.panels.experimental.description'),
       icon: FlaskConical,
       searchEntries: EXPERIMENTAL_PANE_SEARCH_ENTRIES,
       group: 'experimental'

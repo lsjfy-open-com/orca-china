@@ -26,8 +26,7 @@ function buildNativeRebuildArgs(context) {
   return [
     'config/scripts/rebuild-native-deps.mjs',
     `--platform=${platform}`,
-    `--arch=${arch}`,
-    '--force'
+    `--arch=${arch}`
   ]
 }
 

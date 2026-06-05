@@ -2,6 +2,7 @@ import type React from 'react'
 import { cn } from '@/lib/utils'
 import { useAppStore } from '../../store'
 import { matchesSettingsSearch, type SettingsSearchEntry } from './settings-search'
+import { translateUiText } from '@/i18n/ui-text'
 
 type SearchableSettingProps = SettingsSearchEntry & {
   children: React.ReactNode
@@ -20,7 +21,23 @@ export function SearchableSetting({
   id
 }: SearchableSettingProps): React.JSX.Element | null {
   const query = useAppStore((state) => state.settingsSearchQuery)
-  if (!forceVisible && !matchesSettingsSearch(query, { title, description, keywords })) {
+  const localizedTitle = translateUiText(title)
+  const localizedDescription = description ? translateUiText(description) : undefined
+  const localizedKeywords = [
+    title,
+    description ?? '',
+    ...(keywords ?? []),
+    localizedTitle,
+    localizedDescription ?? ''
+  ].filter(Boolean)
+  if (
+    !forceVisible &&
+    !matchesSettingsSearch(query, {
+      title: localizedTitle,
+      description: localizedDescription,
+      keywords: localizedKeywords
+    })
+  ) {
     return null
   }
 

@@ -23,6 +23,7 @@ import {
   ContextMenuTrigger
 } from '@/components/ui/context-menu'
 import { SetupGuideSidebarEntry } from './SetupGuideSidebarEntry'
+import { translateUiText } from '@/i18n/ui-text'
 
 export { getSetupGuideSidebarEntryReady, shouldShowSetupGuideEntry } from './SetupGuideSidebarEntry'
 
@@ -175,7 +176,7 @@ const SidebarNav = React.memo(function SidebarNav() {
             className={cn('size-4 shrink-0', !tasksActive && 'text-sidebar-foreground/30')}
             strokeWidth={tasksActive ? 2.25 : 1.75}
           />
-          <span className="flex-1">Tasks</span>
+          <span className="flex-1">{translateUiText('Tasks')}</span>
           <span className="flex items-center gap-1">
             {visibleTaskProviders.includes('github') ? (
               <span
@@ -189,7 +190,7 @@ const SidebarNav = React.memo(function SidebarNav() {
                   openTaskPage({ taskSource: 'github' })
                 }}
                 className="rounded p-0.5 text-muted-foreground/70 transition-colors hover:text-foreground"
-                aria-label="Open GitHub tasks"
+                aria-label={translateUiText('Open GitHub tasks')}
               >
                 <Github className="size-3.5" aria-hidden />
               </span>
@@ -206,7 +207,7 @@ const SidebarNav = React.memo(function SidebarNav() {
                   openTaskPage({ taskSource: 'gitlab' })
                 }}
                 className="rounded p-0.5 text-muted-foreground/70 transition-colors hover:text-foreground"
-                aria-label="Open GitLab tasks"
+                aria-label={translateUiText('Open GitLab tasks')}
               >
                 <Gitlab className="size-3.5" aria-hidden />
               </span>
@@ -223,7 +224,7 @@ const SidebarNav = React.memo(function SidebarNav() {
                   openTaskPage({ taskSource: 'linear' })
                 }}
                 className="rounded p-0.5 text-muted-foreground/70 transition-colors hover:text-foreground"
-                aria-label="Open Linear tasks"
+                aria-label={translateUiText('Open Linear tasks')}
               >
                 <LinearIcon className="size-3.5" />
               </span>
@@ -240,7 +241,7 @@ const SidebarNav = React.memo(function SidebarNav() {
                   openTaskPage({ taskSource: 'jira' })
                 }}
                 className="rounded p-0.5 text-muted-foreground/70 transition-colors hover:text-foreground"
-                aria-label="Open Jira tasks"
+                aria-label={translateUiText('Open Jira tasks')}
               >
                 <JiraIcon className="size-3.5" />
               </span>
@@ -263,7 +264,7 @@ const SidebarNav = React.memo(function SidebarNav() {
           className={cn('size-4 shrink-0', !automationsActive && 'text-sidebar-foreground/30')}
           strokeWidth={automationsActive ? 2.25 : 1.75}
         />
-        <span className="flex-1">Automations</span>
+        <span className="flex-1">{translateUiText('Automations')}</span>
       </button>
       {showAgentsButton ? (
         <button
@@ -281,7 +282,7 @@ const SidebarNav = React.memo(function SidebarNav() {
             className={cn('size-4 shrink-0', !activityActive && 'text-sidebar-foreground/30')}
             strokeWidth={activityActive ? 2.25 : 1.75}
           />
-          <span className="flex-1">Agents</span>
+          <span className="flex-1">{translateUiText('Agents')}</span>
           {activityUnreadCount > 0 ? (
             <span className="rounded-full bg-primary px-1.5 py-px text-[10px] font-semibold text-primary-foreground">
               {activityUnreadCount}
@@ -310,10 +311,10 @@ const SidebarNav = React.memo(function SidebarNav() {
                 className={cn('size-4 shrink-0', !mobileActive && 'text-sidebar-foreground/30')}
                 strokeWidth={mobileActive ? 2.25 : 1.75}
               />
-              <span className="flex-1">Orca Mobile</span>
+              <span className="flex-1">{translateUiText('Orca Mobile')}</span>
               {mobileOnboardingBadge.visible ? (
                 <span className="rounded-full bg-primary px-1.5 py-px text-[10px] font-semibold text-primary-foreground">
-                  New
+                  {translateUiText('New')}
                 </span>
               ) : null}
             </button>
@@ -321,7 +322,7 @@ const SidebarNav = React.memo(function SidebarNav() {
           <ContextMenuContent>
             <ContextMenuItem onSelect={hideMobileButton}>
               <EyeOff className="size-3.5" />
-              Hide from sidebar
+              {translateUiText('Hide from sidebar')}
             </ContextMenuItem>
           </ContextMenuContent>
         </ContextMenu>
@@ -329,11 +330,11 @@ const SidebarNav = React.memo(function SidebarNav() {
       <button
         type="button"
         onClick={() => openModal('worktree-palette')}
-        aria-label="Search worktrees and browser tabs"
+        aria-label={translateUiText('Search worktrees and browser tabs')}
         className="group flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-left text-[13px] font-medium tracking-tight text-sidebar-foreground/60 transition-colors hover:bg-sidebar-foreground/8"
       >
         <Search className="size-4 shrink-0 text-sidebar-foreground/30" strokeWidth={1.75} />
-        <span className="flex-1">Search</span>
+        <span className="flex-1">{translateUiText('Search')}</span>
         <kbd className="hidden rounded border border-border/60 bg-background/40 px-1.5 py-px font-mono text-[10px] font-medium text-muted-foreground group-hover:inline-flex items-center">
           {worktreePaletteShortcut}
         </kbd>

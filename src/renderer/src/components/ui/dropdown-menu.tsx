@@ -3,6 +3,7 @@ import { CheckIcon, ChevronRightIcon, CircleIcon } from 'lucide-react'
 import { DropdownMenu as DropdownMenuPrimitive } from 'radix-ui'
 
 import { cn } from '@/lib/utils'
+import { translateUiChildren } from '@/i18n/ui-text'
 
 function DropdownMenu({ ...props }: React.ComponentProps<typeof DropdownMenuPrimitive.Root>) {
   return <DropdownMenuPrimitive.Root data-slot="dropdown-menu" {...props} />
@@ -53,6 +54,7 @@ function DropdownMenuItem({
   className,
   inset,
   variant = 'default',
+  children,
   ...props
 }: React.ComponentProps<typeof DropdownMenuPrimitive.Item> & {
   inset?: boolean
@@ -68,7 +70,9 @@ function DropdownMenuItem({
         className
       )}
       {...props}
-    />
+    >
+      {translateUiChildren(children)}
+    </DropdownMenuPrimitive.Item>
   )
 }
 
@@ -93,7 +97,7 @@ function DropdownMenuCheckboxItem({
           <CheckIcon className="size-4" />
         </DropdownMenuPrimitive.ItemIndicator>
       </span>
-      {children}
+      {translateUiChildren(children)}
     </DropdownMenuPrimitive.CheckboxItem>
   )
 }
@@ -123,7 +127,7 @@ function DropdownMenuRadioItem({
           <CircleIcon className="size-2 fill-current" />
         </DropdownMenuPrimitive.ItemIndicator>
       </span>
-      {children}
+      {translateUiChildren(children)}
     </DropdownMenuPrimitive.RadioItem>
   )
 }
@@ -131,6 +135,7 @@ function DropdownMenuRadioItem({
 function DropdownMenuLabel({
   className,
   inset,
+  children,
   ...props
 }: React.ComponentProps<typeof DropdownMenuPrimitive.Label> & {
   inset?: boolean
@@ -144,7 +149,9 @@ function DropdownMenuLabel({
         className
       )}
       {...props}
-    />
+    >
+      {translateUiChildren(children)}
+    </DropdownMenuPrimitive.Label>
   )
 }
 
@@ -193,7 +200,7 @@ function DropdownMenuSubTrigger({
       )}
       {...props}
     >
-      {children}
+      {translateUiChildren(children)}
       <ChevronRightIcon className="ml-auto size-4" />
     </DropdownMenuPrimitive.SubTrigger>
   )

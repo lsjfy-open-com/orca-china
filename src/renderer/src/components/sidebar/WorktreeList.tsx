@@ -68,6 +68,7 @@ import { track } from '@/lib/telemetry'
 import { tabHasLivePty } from '@/lib/tab-has-live-pty'
 import { deriveRunningAgentSendTargets } from '@/lib/running-agent-targets'
 import { rightSidebarShowsPullRequestData } from '@/lib/right-sidebar-visibility'
+import { translateUiText } from '@/i18n/ui-text'
 import {
   type ProjectGroupOrdering,
   type Row,
@@ -4605,14 +4606,14 @@ const WorktreeList = React.memo(function WorktreeList({
       >
         <div className="worktree-sidebar-scrollbar flex h-full flex-col overflow-y-scroll overflow-x-hidden pl-1 scrollbar-sleek pt-px">
           <div className="flex flex-col items-center gap-2 px-4 py-6 text-center text-[11px] text-muted-foreground">
-            <span>No workspaces found</span>
+            <span>{translateUiText('No workspaces found')}</span>
             {hasFilters && (
               <button
                 onClick={clearFilters}
                 className="inline-flex items-center gap-1.5 bg-secondary/70 border border-border/80 text-foreground font-medium text-[11px] px-2.5 py-1 rounded-md cursor-pointer hover:bg-accent transition-colors"
               >
                 <CircleX className="size-3.5" />
-                Clear Filters
+                {translateUiText('Clear Filters')}
               </button>
             )}
           </div>

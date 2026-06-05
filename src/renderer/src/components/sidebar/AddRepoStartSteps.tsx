@@ -3,6 +3,7 @@ import { DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/di
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
+import { translateUiText } from '@/i18n/ui-text'
 
 type AddRepoNestedScanProgressNoticeProps = {
   busyLabel: string
@@ -38,7 +39,7 @@ function AddRepoNestedScanProgressNotice({
             </Button>
           </TooltipTrigger>
           <TooltipContent side="top" sideOffset={4}>
-            Scanning repositories. Click to stop.
+            {translateUiText('Scanning repositories. Click to stop.')}
           </TooltipContent>
         </Tooltip>
       ) : null}
@@ -80,7 +81,7 @@ export function AddRepoServerPathStartStep({
             htmlFor="server-project-path"
             className="text-[11px] font-medium text-muted-foreground block"
           >
-            Server path
+            {translateUiText('Server path')}
           </label>
           <Input
             id="server-project-path"
@@ -123,7 +124,7 @@ export function AddRepoServerPathStartStep({
             disabled={isAddingServerPath}
             className="text-xs text-muted-foreground hover:text-foreground transition-colors cursor-pointer rounded focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:cursor-default disabled:opacity-40"
           >
-            Clone into server path
+            {translateUiText('Clone into server path')}
           </button>
           <button
             type="button"
@@ -131,7 +132,7 @@ export function AddRepoServerPathStartStep({
             disabled={isAddingServerPath}
             className="text-xs text-muted-foreground hover:text-foreground transition-colors cursor-pointer rounded focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:cursor-default disabled:opacity-40"
           >
-            Create on server
+            {translateUiText('Create on server')}
           </button>
         </div>
       </div>
@@ -171,7 +172,7 @@ export function AddRepoLocalStartStep({
         <DialogDescription>
           {repoCount === 0
             ? 'Add a project to get started with Orca.'
-            : 'Add another project to manage with Orca.'}
+            : translateUiText('Add another project to manage with Orca.')}
         </DialogDescription>
       </DialogHeader>
 
@@ -184,9 +185,9 @@ export function AddRepoLocalStartStep({
         >
           <FolderOpen className="size-6 text-muted-foreground" />
           <div>
-            <p className="text-sm font-medium">Browse folder</p>
+            <p className="text-sm font-medium">{translateUiText('Browse folder')}</p>
             <p className="text-[11px] text-muted-foreground font-normal mt-0.5">
-              Local Git project or folder
+              {translateUiText('Local Git project or folder')}
             </p>
           </div>
         </Button>
@@ -199,9 +200,9 @@ export function AddRepoLocalStartStep({
         >
           <Globe className="size-6 text-muted-foreground" />
           <div>
-            <p className="text-sm font-medium">Clone from URL</p>
+            <p className="text-sm font-medium">{translateUiText('Clone from URL')}</p>
             <p className="text-[11px] text-muted-foreground font-normal mt-0.5">
-              Remote Git repository
+              {translateUiText('Remote Git repository')}
             </p>
           </div>
         </Button>
@@ -214,9 +215,9 @@ export function AddRepoLocalStartStep({
         >
           <Monitor className="size-6 text-muted-foreground" />
           <div>
-            <p className="text-sm font-medium">Remote project</p>
+            <p className="text-sm font-medium">{translateUiText('Remote project')}</p>
             <p className="text-[11px] text-muted-foreground font-normal mt-0.5">
-              SSH connected target
+              {translateUiText('SSH connected target')}
             </p>
           </div>
         </Button>
@@ -235,7 +236,9 @@ export function AddRepoLocalStartStep({
         <span className="grid size-6 shrink-0 place-items-center rounded-md border border-border bg-background text-foreground">
           <Lightbulb className="size-3.5" />
         </span>
-        <span>Want to import many repos at once? Select the parent folder.</span>
+        <span>
+          {translateUiText('Want to import many repos at once? Select the parent folder.')}
+        </span>
       </div>
 
       <div className="flex items-center justify-center pt-1">
@@ -245,7 +248,7 @@ export function AddRepoLocalStartStep({
           disabled={isAdding}
           className="text-xs text-muted-foreground hover:text-foreground transition-colors cursor-pointer rounded focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:cursor-default disabled:opacity-40"
         >
-          Or start a new project from scratch
+          {translateUiText('Or start a new project from scratch')}
         </button>
       </div>
     </>

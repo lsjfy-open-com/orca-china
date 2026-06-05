@@ -20,6 +20,7 @@ import RepoBadgeLabel from '@/components/repo/RepoBadgeLabel'
 import { searchRepos } from '@/lib/repo-search'
 import { cn } from '@/lib/utils'
 import { DEFAULT_SHOW_SLEEPING_WORKSPACES } from '../../../../shared/constants'
+import { translateUiText } from '@/i18n/ui-text'
 
 type SidebarFilterProps = {
   preserveWorkspaceBoardOpen?: boolean
@@ -119,7 +120,11 @@ const SidebarFilter = React.memo(function SidebarFilter({
               size="icon-xs"
               type="button"
               aria-label={
-                hasAnyFilter ? `Edit filters (${activeFilterCount} active)` : 'Filter workspaces'
+                hasAnyFilter
+                  ? translateUiText('Edit filters ({{count}} active)', {
+                      count: activeFilterCount
+                    })
+                  : translateUiText('Filter workspaces')
               }
               className="relative text-muted-foreground"
               data-workspace-board-preserve-open={preserveWorkspaceBoardOpen ? '' : undefined}
@@ -139,7 +144,7 @@ const SidebarFilter = React.memo(function SidebarFilter({
           </DropdownMenuTrigger>
         </TooltipTrigger>
         <TooltipContent side={tooltipSide} sideOffset={6}>
-          {hasAnyFilter ? 'Edit filters' : 'Filter workspaces'}
+          {translateUiText(hasAnyFilter ? 'Edit filters' : 'Filter workspaces')}
         </TooltipContent>
       </Tooltip>
       <DropdownMenuContent
@@ -151,13 +156,13 @@ const SidebarFilter = React.memo(function SidebarFilter({
       >
         <FilterToggleRow
           icon={<Moon className="size-3.5" />}
-          label="Hide sleeping"
+          label={translateUiText('Hide sleeping')}
           checked={!showSleepingWorkspaces}
           onChange={(hideSleeping) => setShowSleepingWorkspaces(!hideSleeping)}
         />
         <FilterToggleRow
           icon={<GitBranch className="size-3.5" />}
-          label="Hide default branch"
+          label={translateUiText('Hide default branch')}
           checked={hideDefaultBranchWorkspace}
           onChange={setHideDefaultBranchWorkspace}
         />
@@ -167,7 +172,7 @@ const SidebarFilter = React.memo(function SidebarFilter({
             <DropdownMenuSeparator />
             <div className="flex items-center justify-between px-2 py-1">
               <span className="text-[11px] font-semibold tracking-wide uppercase text-muted-foreground">
-                Projects
+                {translateUiText('Projects')}
                 {hasRepoFilter && (
                   <span className="ml-1.5 normal-case tracking-normal font-medium text-foreground">
                     · {selectedCount}
@@ -181,7 +186,7 @@ const SidebarFilter = React.memo(function SidebarFilter({
                   className="rounded-full px-2 py-0.5 text-[11px] text-muted-foreground hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:opacity-40 disabled:hover:bg-transparent"
                   disabled={allSelected}
                 >
-                  Select all
+                  {translateUiText('Select all')}
                 </button>
                 <button
                   type="button"
@@ -189,7 +194,7 @@ const SidebarFilter = React.memo(function SidebarFilter({
                   className="rounded-full px-2 py-0.5 text-[11px] text-muted-foreground hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:opacity-40 disabled:hover:bg-transparent"
                   disabled={!hasRepoFilter}
                 >
-                  Clear
+                  {translateUiText('Clear')}
                 </button>
               </div>
             </div>
@@ -202,7 +207,7 @@ const SidebarFilter = React.memo(function SidebarFilter({
             >
               <CommandInput
                 autoFocus
-                placeholder="Search projects..."
+                placeholder={translateUiText('Search projects...')}
                 value={query}
                 onValueChange={(nextQuery) => {
                   // Why: typing creates a new filtered list, so keyboard
@@ -216,7 +221,9 @@ const SidebarFilter = React.memo(function SidebarFilter({
                 iconClassName="h-3.5 w-3.5"
               />
               <CommandList className="max-h-64 py-1">
-                <CommandEmpty className="py-4 text-[11px]">No projects match</CommandEmpty>
+                <CommandEmpty className="py-4 text-[11px]">
+                  {translateUiText('No projects match')}
+                </CommandEmpty>
                 {filteredRepos.map((r) => {
                   const checked = selectedRepoIdSet.has(r.id)
                   return (
@@ -261,7 +268,7 @@ const SidebarFilter = React.memo(function SidebarFilter({
               onClick={clearAll}
               className="rounded-[5px] px-2 py-1 text-[11px] text-muted-foreground hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
             >
-              Reset filters
+              {translateUiText('Reset filters')}
             </button>
           ) : (
             <span />
@@ -272,7 +279,7 @@ const SidebarFilter = React.memo(function SidebarFilter({
             className="inline-flex items-center gap-1.5 rounded-[5px] px-2 py-1 text-[11px] text-muted-foreground hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
           >
             <FolderPlus className="size-3.5" />
-            Add project
+            {translateUiText('Add project')}
           </button>
         </div>
       </DropdownMenuContent>

@@ -12,13 +12,13 @@ vi.mock('node:child_process', () => ({
 import { WslCliInstaller, _internals } from './wsl-cli-installer'
 
 function makeHostStatus(
-  launcherPath = 'C:\\Users\\me\\AppData\\Local\\Programs\\Orca\\resources\\bin\\orca.cmd'
+  launcherPath = 'C:\\Users\\me\\AppData\\Local\\Programs\\Orca China\\resources\\bin\\orca-china.cmd'
 ) {
   return {
     platform: 'win32',
-    commandName: 'orca',
-    commandPath: 'C:\\Users\\me\\AppData\\Local\\Programs\\Orca\\bin\\orca.cmd',
-    pathDirectory: 'C:\\Users\\me\\AppData\\Local\\Programs\\Orca\\bin',
+    commandName: 'orca-china',
+    commandPath: 'C:\\Users\\me\\AppData\\Local\\Programs\\Orca China\\bin\\orca-china.cmd',
+    pathDirectory: 'C:\\Users\\me\\AppData\\Local\\Programs\\Orca China\\bin',
     pathConfigured: true,
     launcherPath,
     installMethod: 'wrapper',
@@ -31,7 +31,7 @@ function makeHostStatus(
 }
 
 function createWslRunner(initialFile: string | null = null, pathIncludesLocalBin = true) {
-  const commandPath = '/home/alice/.local/bin/orca-ide'
+  const commandPath = '/home/alice/.local/bin/orca-china'
   const bridgePath = '/home/alice/.local/share/orca/orca-wsl-bridge.ps1'
   const files = new Map<string, string>()
   if (initialFile !== null) {
@@ -110,7 +110,7 @@ describe('WslCliInstaller', () => {
 
     await expect(installer.getStatus()).resolves.toMatchObject({
       state: 'not_installed',
-      commandPath: '/home/alice/.local/bin/orca-ide'
+      commandPath: '/home/alice/.local/bin/orca-china'
     })
 
     const installed = await installer.install()
@@ -118,11 +118,12 @@ describe('WslCliInstaller', () => {
     expect(installed).toMatchObject({
       state: 'installed',
       pathConfigured: true,
-      launcherPath: 'C:\\Users\\me\\AppData\\Local\\Programs\\Orca\\resources\\bin\\orca.cmd'
+      launcherPath:
+        'C:\\Users\\me\\AppData\\Local\\Programs\\Orca China\\resources\\bin\\orca-china.cmd'
     })
     expect(wsl.getFile()).toBe(
       _internals.buildWslLauncher(
-        'C:\\Users\\me\\AppData\\Local\\Programs\\Orca\\resources\\bin\\orca.cmd',
+        'C:\\Users\\me\\AppData\\Local\\Programs\\Orca China\\resources\\bin\\orca-china.cmd',
         '/home/alice/.local/share/orca/orca-wsl-bridge.ps1'
       )
     )
@@ -133,6 +134,9 @@ describe('WslCliInstaller', () => {
   })
 
   it('derives the shared WSL bridge path for current and legacy command names', () => {
+    expect(_internals.getBridgePathFromCommandPath('/home/alice/.local/bin/orca-china')).toBe(
+      '/home/alice/.local/share/orca/orca-wsl-bridge.ps1'
+    )
     expect(_internals.getBridgePathFromCommandPath('/home/alice/.local/bin/orca-ide')).toBe(
       '/home/alice/.local/share/orca/orca-wsl-bridge.ps1'
     )
@@ -273,7 +277,7 @@ describe('WslCliInstaller', () => {
 
     await expect(installer.getStatus()).resolves.toMatchObject({
       state: 'not_installed',
-      commandPath: '/home/alice/.local/bin/orca-ide'
+      commandPath: '/home/alice/.local/bin/orca-china'
     })
   })
 
@@ -293,12 +297,14 @@ describe('WslCliInstaller', () => {
     await expect(installer.getStatus()).resolves.toMatchObject({
       state: 'stale',
       currentTarget: 'C:\\Users\\me\\AppData\\Local\\Programs\\Orca\\bin\\orca.cmd',
-      launcherPath: 'C:\\Users\\me\\AppData\\Local\\Programs\\Orca\\resources\\bin\\orca.cmd'
+      launcherPath:
+        'C:\\Users\\me\\AppData\\Local\\Programs\\Orca China\\resources\\bin\\orca-china.cmd'
     })
 
     await expect(installer.install()).resolves.toMatchObject({
       state: 'installed',
-      currentTarget: 'C:\\Users\\me\\AppData\\Local\\Programs\\Orca\\resources\\bin\\orca.cmd'
+      currentTarget:
+        'C:\\Users\\me\\AppData\\Local\\Programs\\Orca China\\resources\\bin\\orca-china.cmd'
     })
   })
 

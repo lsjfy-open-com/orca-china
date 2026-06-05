@@ -6,6 +6,7 @@ import { Dialog as DialogPrimitive } from 'radix-ui'
 
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
+import { translateUiChildren } from '@/i18n/ui-text'
 
 function Dialog({ ...props }: React.ComponentProps<typeof DialogPrimitive.Root>) {
   return <DialogPrimitive.Root data-slot="dialog" {...props} />
@@ -75,7 +76,7 @@ function DialogContent({
             className="absolute top-4 right-4 rounded-xs opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:outline-hidden disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4"
           >
             <XIcon />
-            <span className="sr-only">Close</span>
+            <span className="sr-only">{translateUiChildren('Close')}</span>
           </DialogPrimitive.Close>
         )}
       </DialogPrimitive.Content>
@@ -117,18 +118,25 @@ function DialogFooter({
   )
 }
 
-function DialogTitle({ className, ...props }: React.ComponentProps<typeof DialogPrimitive.Title>) {
+function DialogTitle({
+  className,
+  children,
+  ...props
+}: React.ComponentProps<typeof DialogPrimitive.Title>) {
   return (
     <DialogPrimitive.Title
       data-slot="dialog-title"
       className={cn('text-lg leading-none font-semibold', className)}
       {...props}
-    />
+    >
+      {translateUiChildren(children)}
+    </DialogPrimitive.Title>
   )
 }
 
 function DialogDescription({
   className,
+  children,
   ...props
 }: React.ComponentProps<typeof DialogPrimitive.Description>) {
   return (
@@ -136,7 +144,9 @@ function DialogDescription({
       data-slot="dialog-description"
       className={cn('text-sm text-muted-foreground', className)}
       {...props}
-    />
+    >
+      {translateUiChildren(children)}
+    </DialogPrimitive.Description>
   )
 }
 

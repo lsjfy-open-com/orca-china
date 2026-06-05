@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input'
 import type { SshConnectionState, SshTarget } from '../../../../shared/ssh-types'
 import { RemoteFileBrowser } from './RemoteFileBrowser'
 import { SshTargetRow } from './SshTargetRow'
+import { translateUiText } from '@/i18n/ui-text'
 
 type RemoteStepProps = {
   sshTargets: (SshTarget & { state?: SshConnectionState })[]
@@ -71,10 +72,14 @@ export function RemoteStep({
 
       <div className="space-y-3 pt-1">
         <div className="space-y-1">
-          <label className="text-[11px] font-medium text-muted-foreground">SSH target</label>
+          <label className="text-[11px] font-medium text-muted-foreground">
+            {translateUiText('SSH target')}
+          </label>
           {sshTargets.length === 0 ? (
             <div className="space-y-1.5 py-1">
-              <p className="text-xs text-muted-foreground">No SSH targets configured.</p>
+              <p className="text-xs text-muted-foreground">
+                {translateUiText('No SSH targets configured.')}
+              </p>
               <Button
                 variant="outline"
                 size="sm"
@@ -101,7 +106,9 @@ export function RemoteStep({
         </div>
 
         <div className="space-y-1">
-          <label className="text-[11px] font-medium text-muted-foreground">Remote path</label>
+          <label className="text-[11px] font-medium text-muted-foreground">
+            {translateUiText('Remote path')}
+          </label>
           <div className="flex gap-2">
             <Input
               value={remotePath}
@@ -137,7 +144,7 @@ export function RemoteStep({
           disabled={!selectedTargetId || !remotePath.trim() || isAddingRemote}
           className="w-full"
         >
-          {isAddingRemote ? 'Adding...' : 'Add remote project'}
+          {translateUiText(isAddingRemote ? 'Adding...' : 'Add remote project')}
         </Button>
         {isScanningNested ? (
           <Button variant="outline" className="w-full" onClick={onStopNestedScan}>

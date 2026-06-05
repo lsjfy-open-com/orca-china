@@ -41,6 +41,7 @@ import {
 } from './SettingsFormControls'
 import { useMountedRef } from '@/hooks/useMountedRef'
 import { normalizeProxyBypassRules, normalizeProxyUrl } from '../../../../shared/network-proxy'
+import { translateUiText } from '@/i18n/ui-text'
 
 function createOpenInApplication(): OpenInApplication {
   return {
@@ -529,7 +530,7 @@ export function GeneralPane({
             </Button>
           </div>
           <p className="text-xs text-muted-foreground">
-            Root directory where workspace folders are created.
+            {translateUiText('Root directory where workspace folders are created.')}
           </p>
         </SearchableSetting>
 
@@ -706,7 +707,9 @@ export function GeneralPane({
           <div className="space-y-1">
             <Label htmlFor="settings-http-proxy-url">HTTP Proxy</Label>
             <p className="text-xs text-muted-foreground">
-              Leave empty to use system proxy settings and inherited proxy environment variables.
+              {translateUiText(
+                'Leave empty to use system proxy settings and inherited proxy environment variables.'
+              )}
             </p>
           </div>
           <Input
@@ -733,7 +736,7 @@ export function GeneralPane({
             <p className="text-xs text-destructive">{httpProxyUrlError}</p>
           ) : (
             <p className="text-xs text-muted-foreground">
-              Supports http, https, socks, socks4, and socks5 URLs.
+              {translateUiText('Supports http, https, socks, socks4, and socks5 URLs.')}
             </p>
           )}
         </SearchableSetting>
@@ -747,7 +750,7 @@ export function GeneralPane({
           <div className="space-y-1">
             <Label htmlFor="settings-http-proxy-bypass-rules">Proxy Bypass Rules</Label>
             <p className="text-xs text-muted-foreground">
-              Optional. Separate hosts with commas, semicolons, or new lines.
+              {translateUiText('Optional. Separate hosts with commas, semicolons, or new lines.')}
             </p>
           </div>
           <Input
@@ -799,8 +802,10 @@ export function GeneralPane({
           <div className="min-w-0 flex-1 space-y-0.5">
             <Label>Auto Save Delay</Label>
             <p className="text-xs text-muted-foreground">
-              How long Orca waits after your last edit before saving automatically. First launch
-              defaults to {DEFAULT_EDITOR_AUTO_SAVE_DELAY_MS} ms.
+              {translateUiText(
+                'How long Orca waits after your last edit before saving automatically. First launch defaults to {{ms}} ms.',
+                { ms: DEFAULT_EDITOR_AUTO_SAVE_DELAY_MS }
+              )}
             </p>
           </div>
           <div className="flex shrink-0 items-center gap-2">
@@ -985,7 +990,9 @@ export function GeneralPane({
       <section key="updates" className="space-y-4">
         <SettingsSubsectionHeader
           title="Updates"
-          description={`Current version: ${appVersion ?? '…'}`}
+          description={translateUiText('Current version: {{version}}', {
+            version: appVersion ?? '...'
+          })}
         />
 
         <SearchableSetting
@@ -1042,8 +1049,9 @@ export function GeneralPane({
           </div>
 
           <p className="text-xs text-muted-foreground">
-            {updateStatus.state === 'idle' && 'Updates are checked automatically on launch.'}
-            {updateStatus.state === 'checking' && 'Checking for updates...'}
+            {updateStatus.state === 'idle' &&
+              translateUiText('Updates are checked automatically on launch.')}
+            {updateStatus.state === 'checking' && translateUiText('Checking for updates...')}
             {updateStatus.state === 'available' && (
               <>
                 Version {updateStatus.version} is available. Click &quot;Install Update&quot; to
@@ -1061,7 +1069,8 @@ export function GeneralPane({
                 </a>
               </>
             )}
-            {updateStatus.state === 'not-available' && 'You\u2019re on the latest version.'}
+            {updateStatus.state === 'not-available' &&
+              translateUiText('You’re on the latest version.')}
             {updateStatus.state === 'downloading' &&
               `Downloading v${updateStatus.version}... ${updateStatus.percent}%`}
             {updateStatus.state === 'downloaded' && (
@@ -1087,8 +1096,10 @@ export function GeneralPane({
               // 'downloaded' state). Label accordingly so a download failure
               // isn't mislabeled as a "check" failure. Mirrors UpdateCard.tsx.
               (updateVersionRef.current
-                ? `Update error. ${updateStatus.message}`
-                : `Update check failed. ${updateStatus.message}`)}
+                ? translateUiText('Update error. {{message}}', { message: updateStatus.message })
+                : translateUiText('Update check failed. {{message}}', {
+                    message: updateStatus.message
+                  }))}
           </p>
         </SearchableSetting>
       </section>
@@ -1205,7 +1216,9 @@ function SupportRow({
           ) : (
             <Star className="size-3.5" />
           )}
-          {state === 'starring' ? 'Starring…' : state === 'error' ? 'Try Again' : 'Star'}
+          {translateUiText(
+            state === 'starring' ? 'Starring...' : state === 'error' ? 'Try Again' : 'Star'
+          )}
         </Button>
       )}
     </SearchableSetting>
@@ -1225,7 +1238,7 @@ function SupportRowThanks(): React.JSX.Element {
       aria-live="polite"
     >
       <Star className="size-3.5 fill-amber-400/80 text-amber-400/80" aria-hidden="true" />
-      Thanks for the support!
+      {translateUiText('Thanks for the support!')}
     </div>
   )
 }

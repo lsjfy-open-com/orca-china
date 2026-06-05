@@ -10,9 +10,11 @@ import type { CliInstallMethod, CliInstallStatus } from '../../shared/cli-instal
 import { buildAppImageCliWrapper } from './appimage-cli-wrapper'
 
 const execFileAsync = promisify(execFile)
-const DEFAULT_MAC_COMMAND_PATH = '/usr/local/bin/orca'
+const LOCALIZED_COMMAND_NAME = 'orca-china'
+const LOCALIZED_APP_NAME = 'Orca China'
+const DEFAULT_MAC_COMMAND_PATH = `/usr/local/bin/${LOCALIZED_COMMAND_NAME}`
 const DEV_COMMAND_NAME = 'orca-dev'
-const LINUX_COMMAND_NAME = 'orca-ide'
+const LINUX_COMMAND_NAME = LOCALIZED_COMMAND_NAME
 const LEGACY_LINUX_COMMAND_NAME = 'orca'
 const DEV_LAUNCHER_DIR = ['cli', 'bin']
 const WINDOWS_PATH_COMMAND_TIMEOUT_MS = 5_000
@@ -64,8 +66,7 @@ export class CliInstaller {
       // Why: development builds must not claim the production shell command.
       return DEV_COMMAND_NAME
     }
-    // Why: packaged Linux uses `orca-ide` to avoid shadowing GNOME Orca's /usr/bin/orca.
-    return this.platform === 'linux' ? LINUX_COMMAND_NAME : 'orca'
+    return this.platform === 'linux' ? LINUX_COMMAND_NAME : LOCALIZED_COMMAND_NAME
   }
 
   constructor(options: CliInstallerOptions = {}) {
@@ -93,7 +94,7 @@ export class CliInstaller {
     const candidateMacPath = options.defaultMacCommandPath ?? DEFAULT_MAC_COMMAND_PATH
     this.macCommandPath = existsSync(dirname(candidateMacPath))
       ? candidateMacPath
-      : join(this.homePath, '.local', 'bin', 'orca')
+      : join(this.homePath, '.local', 'bin', LOCALIZED_COMMAND_NAME)
     this.privilegedRunner = options.privilegedRunner ?? runMacPrivilegedCommand
     this.userPathReader = options.userPathReader ?? (() => readWindowsUserPath())
     this.userPathWriter = options.userPathWriter ?? ((value) => writeWindowsUserPath(value))
@@ -275,17 +276,20 @@ export class CliInstaller {
     }
 
     if (this.platform === 'linux') {
-      // Why: Linux does not have a single privileged global shell-command flow
-      // equivalent to macOS's /usr/local/bin integration. ~/.local/bin is the
-      // least surprising user-scoped location that many distros already expose.
-      // Why `orca-ide`: GNOME Orca (the screen reader) ships /usr/bin/orca on
-      // most Linux distros. Using `orca-ide` avoids shadowing that system
-      // command, matching the executableName already used for the Electron binary.
+      // Why: the localized build must coexist with upstream Orca and GNOME
+      // Orca, so its packaged Linux command uses the localized app identity.
       return join(this.homePath, '.local', 'bin', LINUX_COMMAND_NAME)
     }
 
     if (this.platform === 'win32') {
-      return join(this.localAppDataPath, 'Programs', 'Orca', 'resources', 'bin', 'orca.cmd')
+      return join(
+        this.localAppDataPath,
+        'Programs',
+        LOCALIZED_APP_NAME,
+        'resources',
+        'bin',
+        `${LOCALIZED_COMMAND_NAME}.cmd`
+      )
     }
 
     return null
@@ -1024,13 +1028,13 @@ export function getBundledLauncherPath(
   resourcesPath: string
 ): string | null {
   if (platform === 'darwin') {
-    return join(resourcesPath, 'bin', 'orca')
+    return join(resourcesPath, 'bin', LOCALIZED_COMMAND_NAME)
   }
   if (platform === 'linux') {
     return join(resourcesPath, 'bin', LINUX_COMMAND_NAME)
   }
   if (platform === 'win32') {
-    return join(resourcesPath, 'bin', 'orca.cmd')
+    return join(resourcesPath, 'bin', `${LOCALIZED_COMMAND_NAME}.cmd`)
   }
   return null
 }

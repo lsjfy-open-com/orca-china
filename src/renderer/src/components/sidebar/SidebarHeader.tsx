@@ -6,6 +6,7 @@ import { Tooltip, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip
 import SidebarWorkspaceOptionsMenu from './SidebarWorkspaceOptionsMenu'
 import WorkspaceKanbanDrawer from './WorkspaceKanbanDrawer'
 import { useShortcutLabel } from '@/hooks/useShortcutLabel'
+import { translateUiText } from '@/i18n/ui-text'
 
 const SidebarHeader = React.memo(function SidebarHeader() {
   const newWorktreeShortcutLabel = useShortcutLabel('workspace.create')
@@ -16,7 +17,7 @@ const SidebarHeader = React.memo(function SidebarHeader() {
   const repos = useAppStore((s) => s.repos)
   const groupBy = useAppStore((s) => s.groupBy)
   const canCreateWorkspace = repos.length > 0
-  const sidebarTitle = groupBy === 'repo' ? 'Projects' : 'Workspaces'
+  const sidebarTitle = translateUiText(groupBy === 'repo' ? 'Projects' : 'Workspaces')
   workspaceBoardOpenRef.current = workspaceBoardOpen
 
   const openWorkspaceBoard = useCallback(() => {
@@ -110,7 +111,7 @@ const SidebarHeader = React.memo(function SidebarHeader() {
                 variant={workspaceBoardOpen ? 'secondary' : 'ghost'}
                 size="icon-xs"
                 className="text-muted-foreground"
-                aria-label="Workspace board"
+                aria-label={translateUiText('Workspace board')}
                 aria-pressed={workspaceBoardOpen}
                 data-workspace-board-trigger=""
                 onClick={handleWorkspaceBoardToggle}
@@ -119,7 +120,7 @@ const SidebarHeader = React.memo(function SidebarHeader() {
               </Button>
             </TooltipTrigger>
             <TooltipContent side="bottom" sideOffset={6}>
-              {workspaceBoardOpen ? 'Close workspace board' : 'Workspace board'}
+              {translateUiText(workspaceBoardOpen ? 'Close workspace board' : 'Workspace board')}
             </TooltipContent>
           </Tooltip>
 
@@ -134,7 +135,7 @@ const SidebarHeader = React.memo(function SidebarHeader() {
                   }
                   openModal('new-workspace-composer', { telemetrySource: 'sidebar' })
                 }}
-                aria-label="New workspace"
+                aria-label={translateUiText('New workspace')}
                 disabled={!canCreateWorkspace}
               >
                 <Plus className="size-3.5" strokeWidth={2.25} />
@@ -142,8 +143,10 @@ const SidebarHeader = React.memo(function SidebarHeader() {
             </TooltipTrigger>
             <TooltipContent side="right" sideOffset={6}>
               {canCreateWorkspace
-                ? `New workspace (${newWorktreeShortcutLabel})`
-                : 'Add a project to create workspaces'}
+                ? translateUiText('New workspace ({{shortcut}})', {
+                    shortcut: newWorktreeShortcutLabel
+                  })
+                : translateUiText('Add a project to create workspaces')}
             </TooltipContent>
           </Tooltip>
         </div>

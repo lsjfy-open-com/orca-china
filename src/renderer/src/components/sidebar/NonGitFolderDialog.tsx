@@ -12,6 +12,7 @@ import { Button } from '@/components/ui/button'
 import { useAppStore } from '@/store'
 import { activateAndRevealWorktree } from '@/lib/worktree-activation'
 import { buildDismissedOnboardingFolderAgentStartup } from '@/lib/onboarding-folder-agent-startup'
+import { translateUiText } from '@/i18n/ui-text'
 
 const NonGitFolderDialog = React.memo(function NonGitFolderDialog() {
   const activeModal = useAppStore((s) => s.activeModal)
@@ -89,8 +90,9 @@ const NonGitFolderDialog = React.memo(function NonGitFolderDialog() {
         <DialogHeader>
           <DialogTitle className="text-sm">Open as Folder</DialogTitle>
           <DialogDescription className="text-xs">
-            This folder isn&apos;t a Git repository. You&apos;ll have the editor, terminal, and
-            search, but Git-based features won&apos;t be available.
+            {translateUiText(
+              "This folder isn't a Git repository. You'll have the editor, terminal, and search, but Git-based features won't be available."
+            )}
           </DialogDescription>
         </DialogHeader>
 

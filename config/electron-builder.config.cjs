@@ -42,8 +42,8 @@ const winSpeechNativeResource = {
 
 /** @type {import('electron-builder').Configuration} */
 module.exports = {
-  appId: 'com.stablyai.orca',
-  productName: 'Orca',
+  appId: 'com.stablyai.orca-china',
+  productName: 'Orca China',
   directories: {
     buildResources: 'resources/build'
   },
@@ -140,13 +140,15 @@ module.exports = {
     }
   },
   win: {
-    executableName: 'Orca',
+    executableName: 'Orca China',
+    target: ['nsis', 'zip'],
+    signAndEditExecutable: false,
     extraResources: [
       ...commonExtraResources,
       winSpeechNativeResource,
       {
-        from: 'resources/win32/bin/orca.cmd',
-        to: 'bin/orca.cmd'
+        from: 'resources/win32/bin/orca-china.cmd',
+        to: 'bin/orca-china.cmd'
       },
       {
         from: 'node_modules/agent-browser/bin/agent-browser-win32-x64.exe',
@@ -160,7 +162,7 @@ module.exports = {
     ]
   },
   nsis: {
-    artifactName: 'orca-windows-setup.${ext}',
+    artifactName: 'orca-china-windows-setup.${ext}',
     shortcutName: '${productName}',
     uninstallDisplayName: '${productName}',
     createDesktopShortcut: 'always'
@@ -200,8 +202,8 @@ module.exports = {
       ...commonExtraResources,
       macSpeechNativeResource,
       {
-        from: 'resources/darwin/bin/orca',
-        to: 'bin/orca'
+        from: 'resources/darwin/bin/orca-china',
+        to: 'bin/orca-china'
       },
       {
         from: 'node_modules/agent-browser/bin/agent-browser-darwin-${arch}',
@@ -228,12 +230,12 @@ module.exports = {
   // silently downgrading to ad-hoc artifacts that look shippable in CI logs.
   forceCodeSigning: isMacRelease,
   dmg: {
-    artifactName: 'orca-macos-${arch}.${ext}'
+    artifactName: 'orca-china-macos-${arch}.${ext}'
   },
   linux: {
     // Why: Ubuntu 26 ships GNOME Orca as the `orca` package and /usr/bin/orca.
     // The Linux installer should not claim those system package/file names.
-    executableName: 'orca-ide',
+    executableName: 'orca-china',
     // Why: the icns source lets electron-builder emit standard hicolor PNG
     // sizes; a single 1024px PNG is ignored by some Linux docks/launchers.
     icon: 'resources/build/icon.icns',
@@ -241,8 +243,8 @@ module.exports = {
       ...commonExtraResources,
       linuxSpeechNativeResource,
       {
-        from: 'resources/linux/bin/orca-ide',
-        to: 'bin/orca-ide'
+        from: 'resources/linux/bin/orca-china',
+        to: 'bin/orca-china'
       },
       {
         from: 'node_modules/agent-browser/bin/agent-browser-linux-${arch}',
@@ -259,39 +261,36 @@ module.exports = {
     category: 'Utility'
   },
   appImage: {
-    artifactName: 'orca-linux.${ext}'
+    artifactName: 'orca-china-linux.${ext}'
   },
   deb: {
-    packageName: 'orca-ide',
-    artifactName: 'orca-ide_${version}_${arch}.${ext}',
+    packageName: 'orca-china',
+    artifactName: 'orca-china_${version}_${arch}.${ext}',
     depends: ['python3', 'python3-gi', 'gir1.2-atspi-2.0', 'at-spi2-core', 'xdotool', 'xclip']
   },
   rpm: {
-    packageName: 'orca-ide',
-    artifactName: 'orca-ide-${version}.${arch}.${ext}',
+    packageName: 'orca-china',
+    artifactName: 'orca-china-${version}.${arch}.${ext}',
     depends: ['python3', 'python3-gobject', 'at-spi2-core', 'xdotool', 'xclip']
   },
   beforeBuild: electronBuilderNativeRebuild,
-  // Why: must be true so that electron-builder rebuilds native modules
-  // (node-pty) for each target architecture when producing dual-arch macOS
-  // builds (x64 + arm64). With npmRebuild disabled, CI on an arm64 runner
-  // packages arm64 binaries into the x64 DMG, causing "posix_spawnp failed"
-  // on Intel Macs. The beforeBuild hook performs Orca's targeted rebuild and
-  // returns false so electron-builder does not rebuild optional cpu-features.
-  npmRebuild: true,
+  // Why: must be false to skip native module rebuild — use prebuilt binaries
+  // from node-pty's prebuilds directory instead of compiling from source.
+  npmRebuild: false,
   publish: {
     provider: 'github',
     owner: 'stablyai',
     repo: 'orca',
     releaseType: 'release'
-  }
+  },
+  electronDist: 'node_modules/electron/dist'
 }
 
 function chmodUnixCliLaunchers(resourcesDir, electronPlatformName) {
   if (electronPlatformName === 'win32') {
     return
   }
-  for (const launcherName of ['orca', 'orca-ide']) {
+  for (const launcherName of ['orca', 'orca-ide', 'orca-china']) {
     const launcherPath = join(resourcesDir, 'bin', launcherName)
     if (!existsSync(launcherPath)) {
       continue

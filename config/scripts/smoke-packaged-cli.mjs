@@ -22,12 +22,12 @@ function readAppDirArg(argv) {
 
 function getPackagedCliPath(appDir) {
   if (process.platform === 'darwin' || appDir.endsWith('.app')) {
-    return join(appDir, 'Contents', 'Resources', 'bin', 'orca')
+    return join(appDir, 'Contents', 'Resources', 'bin', 'orca-china')
   }
   if (process.platform === 'win32') {
-    return join(appDir, 'resources', 'bin', 'orca.cmd')
+    return join(appDir, 'resources', 'bin', 'orca-china.cmd')
   }
-  return join(appDir, 'resources', 'bin', 'orca-ide')
+  return join(appDir, 'resources', 'bin', 'orca-china')
 }
 
 const appDir = resolve(readAppDirArg(process.argv.slice(2)))

@@ -14,12 +14,7 @@ describe('electron-builder native rebuild hook', () => {
         platform: { nodeName: 'darwin' },
         arch: 'x64'
       })
-    ).toEqual([
-      'config/scripts/rebuild-native-deps.mjs',
-      '--platform=darwin',
-      '--arch=x64',
-      '--force'
-    ])
+    ).toEqual(['config/scripts/rebuild-native-deps.mjs', '--platform=darwin', '--arch=x64'])
   })
 
   it('returns false so electron-builder skips its optional module rebuild pass', () => {
@@ -36,7 +31,7 @@ describe('electron-builder native rebuild hook', () => {
     expect(calls).toEqual([
       [
         process.execPath,
-        ['config/scripts/rebuild-native-deps.mjs', '--platform=linux', '--arch=arm64', '--force'],
+        ['config/scripts/rebuild-native-deps.mjs', '--platform=linux', '--arch=arm64'],
         expect.objectContaining({ stdio: 'inherit' })
       ]
     ])

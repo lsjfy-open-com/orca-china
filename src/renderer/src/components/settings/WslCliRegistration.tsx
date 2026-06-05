@@ -61,7 +61,7 @@ export function WslCliRegistration({
 
   const isEnabled = status?.state === 'installed'
   const isSupported = status?.supported ?? false
-  const commandName = status?.commandName ?? 'orca-ide'
+  const commandName = status?.commandName ?? 'orca-china'
 
   const handleInstall = async (): Promise<void> => {
     setBusyAction('install')
@@ -118,7 +118,7 @@ export function WslCliRegistration({
             <p className="text-xs text-muted-foreground">
               {loading
                 ? 'Checking WSL CLI registration...'
-                : (status?.detail ?? 'Register `orca-ide` in ~/.local/bin inside WSL.')}
+                : (status?.detail ?? 'Register `orca-china` in ~/.local/bin inside WSL.')}
             </p>
           </div>
           <div className="flex items-center gap-2">

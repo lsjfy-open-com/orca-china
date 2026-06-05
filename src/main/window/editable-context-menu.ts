@@ -3,6 +3,7 @@ import {
   type RichMarkdownContextMenuCommand,
   type RichMarkdownContextMenuCommandPayload
 } from '../../shared/rich-markdown-context-menu'
+import { t } from '../../shared/i18n'
 
 type EditableContextMenuWebContents = Pick<
   Electron.WebContents,
@@ -29,46 +30,46 @@ function buildMarkdownMenuTemplate(
   point: { x: number; y: number }
 ): Electron.MenuItemConstructorOptions[] {
   return [
-    markdownCommandItem('Add link', 'add-link', webContents, point),
+    markdownCommandItem(t('contextMenu.addLink'), 'add-link', webContents, point),
     { type: 'separator' },
     {
-      label: 'Format',
+      label: t('contextMenu.format'),
       submenu: [
-        markdownCommandItem('Bold', 'bold', webContents, point),
-        markdownCommandItem('Italic', 'italic', webContents, point),
-        markdownCommandItem('Strike', 'strike', webContents, point),
-        markdownCommandItem('Inline code', 'inline-code', webContents, point),
-        markdownCommandItem('Code block', 'code-block', webContents, point),
-        markdownCommandItem('Quote', 'blockquote', webContents, point)
+        markdownCommandItem(t('contextMenu.bold'), 'bold', webContents, point),
+        markdownCommandItem(t('contextMenu.italic'), 'italic', webContents, point),
+        markdownCommandItem(t('contextMenu.strike'), 'strike', webContents, point),
+        markdownCommandItem(t('contextMenu.inlineCode'), 'inline-code', webContents, point),
+        markdownCommandItem(t('contextMenu.codeBlock'), 'code-block', webContents, point),
+        markdownCommandItem(t('contextMenu.quote'), 'blockquote', webContents, point)
       ]
     },
     {
-      label: 'Paragraph',
+      label: t('contextMenu.paragraph'),
       submenu: [
-        markdownCommandItem('Body text', 'paragraph', webContents, point),
-        markdownCommandItem('Heading 1', 'heading-1', webContents, point),
-        markdownCommandItem('Heading 2', 'heading-2', webContents, point),
-        markdownCommandItem('Heading 3', 'heading-3', webContents, point),
+        markdownCommandItem(t('contextMenu.bodyText'), 'paragraph', webContents, point),
+        markdownCommandItem(t('contextMenu.heading1'), 'heading-1', webContents, point),
+        markdownCommandItem(t('contextMenu.heading2'), 'heading-2', webContents, point),
+        markdownCommandItem(t('contextMenu.heading3'), 'heading-3', webContents, point),
         { type: 'separator' },
-        markdownCommandItem('Bullet list', 'bullet-list', webContents, point),
-        markdownCommandItem('Numbered list', 'ordered-list', webContents, point),
-        markdownCommandItem('Checklist', 'task-list', webContents, point)
+        markdownCommandItem(t('contextMenu.bulletList'), 'bullet-list', webContents, point),
+        markdownCommandItem(t('contextMenu.numberedList'), 'ordered-list', webContents, point),
+        markdownCommandItem(t('contextMenu.checklist'), 'task-list', webContents, point)
       ]
     },
     {
-      label: 'Insert',
+      label: t('contextMenu.insert'),
       submenu: [
-        markdownCommandItem('Link', 'add-link', webContents, point),
-        markdownCommandItem('Image', 'image', webContents, point),
-        markdownCommandItem('Divider', 'divider', webContents, point),
-        markdownCommandItem('Code block', 'code-block', webContents, point)
+        markdownCommandItem(t('contextMenu.link'), 'add-link', webContents, point),
+        markdownCommandItem(t('contextMenu.image'), 'image', webContents, point),
+        markdownCommandItem(t('contextMenu.divider'), 'divider', webContents, point),
+        markdownCommandItem(t('contextMenu.codeBlock'), 'code-block', webContents, point)
       ]
     },
     { type: 'separator' },
     { role: 'cut' },
     { role: 'copy' },
     { role: 'paste' },
-    { role: 'pasteAndMatchStyle', label: 'Paste as plain text' },
+    { role: 'pasteAndMatchStyle', label: t('contextMenu.pasteAsPlainText') },
     { role: 'selectAll' }
   ]
 }
@@ -78,7 +79,7 @@ function buildNativeEditMenuTemplate(): Electron.MenuItemConstructorOptions[] {
     { role: 'cut' },
     { role: 'copy' },
     { role: 'paste' },
-    { role: 'pasteAndMatchStyle', label: 'Paste as plain text' },
+    { role: 'pasteAndMatchStyle', label: t('contextMenu.pasteAsPlainText') },
     { role: 'selectAll' }
   ]
 }
@@ -107,7 +108,7 @@ export function buildEditableContextMenuTemplate(
       template.push({ type: 'separator' })
     }
     template.push({
-      label: 'Add to dictionary',
+      label: t('contextMenu.addToDictionary'),
       click: () => {
         webContents.session.addWordToSpellCheckerDictionary(params.misspelledWord)
       }

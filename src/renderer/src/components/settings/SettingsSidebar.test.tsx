@@ -3,12 +3,14 @@ import { Bot, Mic, Network } from 'lucide-react'
 import { describe, expect, it, vi } from 'vitest'
 import { SettingsSidebar } from './SettingsSidebar'
 import { TooltipProvider } from '../ui/tooltip'
+import { initI18n } from '../../i18n'
 
 vi.mock('@/hooks/useShortcutLabel', () => ({
   useShortcutLabel: () => '⌘F'
 }))
 
-function renderSidebar(): string {
+async function renderSidebar(locale: 'en' | 'zh-CN' = 'en'): Promise<string> {
+  await initI18n(locale)
   return renderToStaticMarkup(
     <TooltipProvider>
       <SettingsSidebar
@@ -62,11 +64,18 @@ function renderSidebar(): string {
 }
 
 describe('SettingsSidebar', () => {
-  it('renders install state labels separately from static badges', () => {
-    const markup = renderSidebar()
+  it('renders install state labels separately from static badges', async () => {
+    const markup = await renderSidebar()
 
     expect(markup).toContain('Not installed')
     expect(markup).toContain('Installed')
     expect(markup).toContain('Optional')
+  })
+
+  it('renders localized install state labels', async () => {
+    const markup = await renderSidebar('zh-CN')
+
+    expect(markup).toContain('未安装')
+    expect(markup).toContain('已安装')
   })
 })

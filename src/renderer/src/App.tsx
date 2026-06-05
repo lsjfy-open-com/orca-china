@@ -9,6 +9,7 @@ import {
   useState,
   type SetStateAction
 } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import {
   ArrowLeft,
@@ -148,6 +149,7 @@ function getKeybindingContext(target: EventTarget | null): KeybindingContext {
 // so we render our own minimize/maximize/close buttons.  These SVG icons match
 // the Fluent/Win11 style: thin 10×10 paths on a 40×30 hit area.
 function WindowControls(): React.JSX.Element {
+  const { t } = useTranslation()
   const [maximized, setMaximized] = useState(false)
   useEffect(() => {
     // Why: window:maximize-changed only fires on transitions, so a window
@@ -169,7 +171,7 @@ function WindowControls(): React.JSX.Element {
     <div className="window-controls">
       <button
         className="window-controls-btn"
-        aria-label="Minimize"
+        aria-label={t('app.minimize')}
         onClick={() => window.api.ui.minimize()}
       >
         <svg width="10" height="10" viewBox="0 0 10 10" aria-hidden>
@@ -178,7 +180,7 @@ function WindowControls(): React.JSX.Element {
       </button>
       <button
         className="window-controls-btn"
-        aria-label={maximized ? 'Restore' : 'Maximize'}
+        aria-label={maximized ? t('app.restore') : t('app.maximize')}
         onClick={() => window.api.ui.maximize()}
       >
         {maximized ? (
@@ -195,7 +197,7 @@ function WindowControls(): React.JSX.Element {
       </button>
       <button
         className="window-controls-btn window-controls-close"
-        aria-label="Close"
+        aria-label={t('app.close')}
         // Why: IPC to main so the BrowserWindow 'close' event fires, which
         // sends 'window:close-requested' back to the renderer and keeps the
         // terminal-running confirmation guard active. window.close() is
@@ -266,6 +268,7 @@ function applyRemoteWorkspacePatchStatus(
 }
 
 function App(): React.JSX.Element {
+  const { t } = useTranslation()
   const clearUnreadDockBadge = useUnreadDockBadge()
   useRadixBodyPointerEventsRecovery()
   useWebSessionTabsSync()
@@ -1488,14 +1491,14 @@ function App(): React.JSX.Element {
               <TooltipTrigger asChild>
                 <button
                   className="titlebar-icon-button"
-                  aria-label="Application menu"
+                  aria-label={t('app.applicationMenu')}
                   onClick={() => window.api.ui.popupMenu()}
                 >
                   <MoreHorizontal size={14} />
                 </button>
               </TooltipTrigger>
               <TooltipContent side="bottom" sideOffset={6}>
-                Application menu
+                {t('app.applicationMenu')}
               </TooltipContent>
             </Tooltip>
           </>
@@ -1530,13 +1533,13 @@ function App(): React.JSX.Element {
               <button
                 className="sidebar-toggle"
                 onClick={actions.toggleSidebar}
-                aria-label="Toggle sidebar"
+                aria-label={t('app.toggleSidebar')}
               >
                 <PanelLeft size={16} />
               </button>
             </TooltipTrigger>
             <TooltipContent side="bottom" sideOffset={6}>
-              {`Toggle sidebar (${leftSidebarShortcutLabel})`}
+              {`${t('app.toggleSidebar')} (${leftSidebarShortcutLabel})`}
             </TooltipContent>
           </Tooltip>
         )}
@@ -1554,13 +1557,13 @@ function App(): React.JSX.Element {
                 className="sidebar-toggle sidebar-toggle-compact"
                 onClick={() => useAppStore.getState().goBackWorktree()}
                 disabled={!canGoBackWorktree}
-                aria-label="Go back"
+                aria-label={t('app.goBack')}
               >
                 <ArrowLeft size={12} />
               </button>
             </TooltipTrigger>
             <TooltipContent side="bottom" sideOffset={6}>
-              {`Go back (${historyBackShortcutLabel})`}
+              {`${t('app.goBack')} (${historyBackShortcutLabel})`}
             </TooltipContent>
           </Tooltip>
           <Tooltip>
@@ -1569,13 +1572,13 @@ function App(): React.JSX.Element {
                 className="sidebar-toggle sidebar-toggle-compact"
                 onClick={() => useAppStore.getState().goForwardWorktree()}
                 disabled={!canGoForwardWorktree}
-                aria-label="Go forward"
+                aria-label={t('app.goForward')}
               >
                 <ArrowRight size={12} />
               </button>
             </TooltipTrigger>
             <TooltipContent side="bottom" sideOffset={6}>
-              {`Go forward (${historyForwardShortcutLabel})`}
+              {`${t('app.goForward')} (${historyForwardShortcutLabel})`}
             </TooltipContent>
           </Tooltip>
         </div>
@@ -1589,13 +1592,13 @@ function App(): React.JSX.Element {
         <button
           className="sidebar-toggle mr-2"
           onClick={actions.toggleRightSidebar}
-          aria-label="Toggle right sidebar"
+          aria-label={t('app.toggleRightSidebar')}
         >
           <PanelRight size={16} />
         </button>
       </TooltipTrigger>
       <TooltipContent side="bottom" sideOffset={6}>
-        {`Toggle right sidebar (${rightSidebarShortcutLabel})`}
+        {`${t('app.toggleRightSidebar')} (${rightSidebarShortcutLabel})`}
       </TooltipContent>
     </Tooltip>
   ) : null
@@ -1629,7 +1632,7 @@ function App(): React.JSX.Element {
             boundaryId="app.workspace-shell"
             surface="workspace-shell"
             resetKey={activeView}
-            title="The workspace shell hit an error."
+            title={t('app.workspaceShellError')}
             description="The app is still running. Retry the shell or use the menu to report the crash details."
           >
             <div className="flex flex-row flex-1 min-h-0 overflow-hidden">
@@ -1665,14 +1668,14 @@ function App(): React.JSX.Element {
                           <button
                             className="titlebar-icon-button"
                             onClick={handleToggleExpand}
-                            aria-label="Collapse pane"
+                            aria-label={t('app.collapsePane')}
                             disabled={!activeTabCanExpand}
                           >
                             <Minimize2 size={14} />
                           </button>
                         </TooltipTrigger>
                         <TooltipContent side="bottom" sideOffset={6}>
-                          Collapse pane
+                          {t('app.collapsePane')}
                         </TooltipContent>
                       </Tooltip>
                     )}
@@ -1734,7 +1737,7 @@ function App(): React.JSX.Element {
                             boundaryId="sidebar.worktrees"
                             surface="sidebar"
                             resetKey={activeView}
-                            title="The workspace list hit an error."
+                            title={t('app.workspaceListError')}
                             description="The active workspace remains open. Retry the list or switch views."
                           >
                             <Sidebar
@@ -1749,7 +1752,7 @@ function App(): React.JSX.Element {
                         boundaryId="sidebar.worktrees"
                         surface="sidebar"
                         resetKey={activeView}
-                        title="The workspace list hit an error."
+                        title={t('app.workspaceListError')}
                         description="The active page remains open. Retry the list or switch views."
                       >
                         <Sidebar
@@ -1798,7 +1801,7 @@ function App(): React.JSX.Element {
                           boundaryId="terminal.workbench"
                           surface="terminal-workbench"
                           resetKey="terminal"
-                          title="The workspace workbench hit an error."
+                          title={t('app.workbenchError')}
                           description="Terminal, browser, or editor rendering failed in this workspace. Retry to remount it."
                         >
                           <Terminal />
@@ -1809,7 +1812,7 @@ function App(): React.JSX.Element {
                           boundaryId={`page.${activeView}`}
                           surface="page"
                           resetKey={activeView}
-                          title="This page hit an error."
+                          title={t('app.pageError')}
                           description="Retry the page or navigate to another Orca surface."
                         >
                           {activeView === 'settings' ? <Settings /> : null}
@@ -1841,7 +1844,7 @@ function App(): React.JSX.Element {
                   boundaryId="right-sidebar"
                   surface="right-sidebar"
                   resetKey={rightSidebarTab}
-                  title="The right sidebar hit an error."
+                  title={t('app.rightSidebarError')}
                   description="Retry the sidebar or switch tabs to reload this surface."
                 >
                   <RightSidebar />
@@ -1855,7 +1858,7 @@ function App(): React.JSX.Element {
               surface="overlay"
               resetKey={floatingTerminalOpen}
               compact
-              title="The floating workspace hit an error."
+              title={t('app.floatingWorkspaceError')}
               description="Retry the floating workspace or close and reopen it."
             >
               <FloatingTerminalPanel
@@ -1869,7 +1872,7 @@ function App(): React.JSX.Element {
             surface="overlay"
             resetKey={activeView}
             compact
-            title="The status bar hit an error."
+            title={t('app.statusBarError')}
             description="Retry the status bar to remount its controls."
           >
             <StatusBar floatingTerminalOpen={floatingTerminalOpen} />
@@ -2036,7 +2039,7 @@ function App(): React.JSX.Element {
             reportAsCrash={false}
             resetKey={activeModal}
             compact
-            title="The crash report dialog hit an error."
+            title={t('app.crashReportError')}
             description="Use the Help menu after retrying if you still need diagnostics."
           >
             <CrashReportDialog />
@@ -2047,7 +2050,7 @@ function App(): React.JSX.Element {
                 boundaryId="modal.onboarding"
                 surface="modal"
                 resetKey={onboardingSettingsDetourActive}
-                title="Onboarding hit an error."
+                title={t('app.onboardingError')}
                 description="Retry onboarding or close it and continue in the app."
               >
                 <OnboardingFlow

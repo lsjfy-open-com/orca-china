@@ -10,6 +10,7 @@ import { Check, ChevronsUpDown, CircleX } from 'lucide-react'
 import { BUILTIN_TERMINAL_THEME_NAMES, normalizeColor } from '@/lib/terminal-theme'
 import { MAX_THEME_RESULTS } from './SettingsConstants'
 import { cn } from '@/lib/utils'
+import { translateUiNode, translateUiText } from '@/i18n/ui-text'
 
 type SettingsSwitchProps = {
   checked: boolean
@@ -68,13 +69,17 @@ export function SettingsRow({
   labelId,
   alignTop
 }: SettingsRowProps): React.JSX.Element {
+  const localizedLabel = translateUiNode(label)
+  const localizedDescription = translateUiNode(description)
   return (
     <div
       className={cn('flex gap-4 py-2', alignTop ? 'items-start' : 'items-center justify-between')}
     >
       <div className="min-w-0 flex-1 space-y-0.5">
-        <Label id={labelId}>{label}</Label>
-        {description ? <p className="text-xs text-muted-foreground">{description}</p> : null}
+        <Label id={labelId}>{localizedLabel}</Label>
+        {localizedDescription ? (
+          <p className="text-xs text-muted-foreground">{localizedDescription}</p>
+        ) : null}
       </div>
       <div className="shrink-0">{control}</div>
     </div>
@@ -104,7 +109,13 @@ export function SettingsSwitchRow({
         <SettingsSwitch
           checked={checked}
           onChange={onChange}
-          ariaLabel={ariaLabel ?? (typeof label === 'string' ? label : undefined)}
+          ariaLabel={
+            ariaLabel
+              ? translateUiText(ariaLabel)
+              : typeof label === 'string'
+                ? translateUiText(label)
+                : undefined
+          }
         />
       }
     />
@@ -139,7 +150,7 @@ export function SettingsSegmentedControl<T extends string | number>({
   return (
     <div
       role="radiogroup"
-      aria-label={ariaLabel}
+      aria-label={ariaLabel ? translateUiText(ariaLabel) : undefined}
       className={cn(
         'inline-flex items-center rounded-md border border-border bg-background/50 p-0.5',
         equalWidth && 'w-full'
@@ -153,7 +164,7 @@ export function SettingsSegmentedControl<T extends string | number>({
             type="button"
             role="radio"
             aria-checked={active}
-            aria-label={opt.ariaLabel}
+            aria-label={opt.ariaLabel ? translateUiText(opt.ariaLabel) : undefined}
             disabled={opt.disabled}
             onClick={() => {
               if (!opt.disabled) {
@@ -171,7 +182,7 @@ export function SettingsSegmentedControl<T extends string | number>({
                   : 'text-muted-foreground hover:text-foreground'
             )}
           >
-            {opt.label}
+            {translateUiNode(opt.label)}
           </button>
         )
       })}
@@ -191,6 +202,7 @@ export function SettingsBadge({
   children,
   className
 }: SettingsBadgeProps): React.JSX.Element {
+  const localizedChildren = translateUiNode(children)
   return (
     <span
       className={cn(
@@ -203,7 +215,7 @@ export function SettingsBadge({
         className
       )}
     >
-      {children}
+      {localizedChildren}
     </span>
   )
 }
@@ -220,11 +232,15 @@ export function SettingsSubsectionHeader({
   description,
   action
 }: SettingsSubsectionHeaderProps): React.JSX.Element {
+  const localizedTitle = translateUiNode(title)
+  const localizedDescription = translateUiNode(description)
   return (
     <div className="flex items-start justify-between gap-3">
       <div className="space-y-1">
-        <h3 className="text-sm font-semibold">{title}</h3>
-        {description ? <p className="text-xs text-muted-foreground">{description}</p> : null}
+        <h3 className="text-sm font-semibold">{localizedTitle}</h3>
+        {localizedDescription ? (
+          <p className="text-xs text-muted-foreground">{localizedDescription}</p>
+        ) : null}
       </div>
       {action ? <div className="shrink-0">{action}</div> : null}
     </div>
@@ -288,22 +304,22 @@ export function ThemePicker({
   return (
     <div className="space-y-3">
       <div className="space-y-1">
-        <Label>{label}</Label>
-        <p className="text-xs text-muted-foreground">{description}</p>
+        <Label>{translateUiText(label)}</Label>
+        <p className="text-xs text-muted-foreground">{translateUiText(description)}</p>
       </div>
       <Input
         value={query}
         onChange={(e) => onQueryChange(e.target.value)}
-        placeholder="Search builtin themes"
+        placeholder={translateUiText('Search builtin themes')}
       />
       <div className="rounded-lg border border-border/50">
         <div className="flex items-center justify-between border-b border-border/50 px-3 py-2 text-xs text-muted-foreground">
-          <span>Selected: {selectedTheme}</span>
+          <span>{translateUiText('Selected: {{theme}}', { theme: selectedTheme })}</span>
           <span>
-            Showing {filteredThemes.length}
+            {translateUiText('Showing {{count}}', { count: filteredThemes.length })}
             {normalizedQuery
-              ? ` matching "${query.trim()}"`
-              : ` of ${BUILTIN_TERMINAL_THEME_NAMES.length}`}
+              ? translateUiText(' matching "{{query}}"', { query: query.trim() })
+              : translateUiText(' of {{count}}', { count: BUILTIN_TERMINAL_THEME_NAMES.length })}
           </span>
         </div>
         <ScrollArea className="h-64">
@@ -321,13 +337,15 @@ export function ThemePicker({
                 <span className="truncate">{theme}</span>
                 {selectedTheme === theme ? (
                   <span className="ml-3 shrink-0 text-[11px] uppercase tracking-[0.16em]">
-                    Current
+                    {translateUiText('Current')}
                   </span>
                 ) : null}
               </button>
             ))}
             {filteredThemes.length === 0 ? (
-              <div className="px-3 py-6 text-sm text-muted-foreground">No themes found.</div>
+              <div className="px-3 py-6 text-sm text-muted-foreground">
+                {translateUiText('No themes found.')}
+              </div>
             ) : null}
           </div>
         </ScrollArea>
@@ -620,8 +638,8 @@ export function FontAutocomplete({
                 focusInput()
               }}
               className="rounded-sm p-1 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
-              aria-label="Clear font selection"
-              title="Clear"
+              aria-label={translateUiText('Clear font selection')}
+              title={translateUiText('Clear')}
             >
               <CircleX className="size-3.5" />
             </button>
@@ -637,8 +655,8 @@ export function FontAutocomplete({
               }
             }}
             className="rounded-sm p-1 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
-            aria-label="Toggle font suggestions"
-            title="Fonts"
+            aria-label={translateUiText('Toggle font suggestions')}
+            title={translateUiText('Fonts')}
           >
             <ChevronsUpDown className="size-3.5" />
           </button>
@@ -676,7 +694,9 @@ export function FontAutocomplete({
                   </button>
                 ))
               ) : (
-                <div className="px-3 py-3 text-sm text-muted-foreground">No matching fonts.</div>
+                <div className="px-3 py-3 text-sm text-muted-foreground">
+                  {translateUiText('No matching fonts.')}
+                </div>
               )}
             </div>
           </ScrollArea>

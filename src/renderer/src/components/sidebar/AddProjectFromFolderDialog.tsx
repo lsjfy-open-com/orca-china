@@ -15,6 +15,7 @@ import { useAppStore } from '@/store'
 import type { Repo } from '../../../../shared/types'
 import { isGitRepoKind } from '../../../../shared/repo-kind'
 import { finishProjectAddWithDefaultCheckout } from './project-added-default-checkout'
+import { translateUiText } from '@/i18n/ui-text'
 
 const NON_GIT_REPO_ERROR = 'Not a valid git repository'
 
@@ -87,7 +88,7 @@ const AddProjectFromFolderDialog = React.memo(function AddProjectFromFolderDialo
         if (!mountedRef.current || gen !== addGenRef.current) {
           return
         }
-        toast.success('Remote project added', { description: repo.displayName })
+        toast.success(translateUiText('Remote project added'), { description: repo.displayName })
       } else {
         repo = await addRepoPath(folderPath)
       }

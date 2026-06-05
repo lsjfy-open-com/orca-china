@@ -24,6 +24,7 @@ import { useMountedRef } from '@/hooks/useMountedRef'
 import { showOnboardingFromRenderer } from '../onboarding/show-onboarding-event'
 import { SidebarFeedbackDialog } from './SidebarFeedbackDialog'
 import { ScrollToCurrentWorkspaceToolbarButton } from './ScrollToCurrentWorkspaceToolbarButton'
+import { translateUiText } from '@/i18n/ui-text'
 
 const DOCS_URL = 'https://www.onorca.dev/docs'
 
@@ -92,11 +93,11 @@ const SidebarToolbar = React.memo(function SidebarToolbar() {
               className="gap-1.5 text-muted-foreground"
             >
               <FolderPlus className="size-3.5" />
-              <span className="text-[11px]">Add Project</span>
+              <span className="text-[11px]">{translateUiText('Add Project')}</span>
             </Button>
           </TooltipTrigger>
           <TooltipContent side="top" sideOffset={4}>
-            Open folder picker to add a project
+            {translateUiText('Open folder picker to add a project')}
           </TooltipContent>
         </Tooltip>
         <div className="flex items-center gap-1">
@@ -109,7 +110,7 @@ const SidebarToolbar = React.memo(function SidebarToolbar() {
                     variant="ghost"
                     size="icon-xs"
                     type="button"
-                    aria-label="Help"
+                    aria-label={translateUiText('Help')}
                     className="text-muted-foreground"
                     onPointerDown={(event) => revealAdminHelpOptions(event.altKey)}
                     onClick={(event) => revealAdminHelpOptions(event.altKey)}
@@ -119,7 +120,7 @@ const SidebarToolbar = React.memo(function SidebarToolbar() {
                 </DropdownMenuTrigger>
               </TooltipTrigger>
               <TooltipContent side="top" sideOffset={4}>
-                Help
+                {translateUiText('Help')}
               </TooltipContent>
             </Tooltip>
             <DropdownMenuContent side="top" align="start" sideOffset={8} className="w-48">
@@ -132,7 +133,7 @@ const SidebarToolbar = React.memo(function SidebarToolbar() {
                   aria-hidden="true"
                   className="size-3.5 object-contain invert opacity-55 dark:invert-0"
                 />
-                Onboarding checklist
+                {translateUiText('Onboarding checklist')}
               </DropdownMenuItem>
               <DropdownMenuItem
                 className="whitespace-nowrap"
@@ -140,22 +141,22 @@ const SidebarToolbar = React.memo(function SidebarToolbar() {
                 onSelect={handleShowOnboarding}
               >
                 <School className="size-3.5" />
-                Show onboarding
+                {translateUiText('Show onboarding')}
               </DropdownMenuItem>
               <DropdownMenuItem onSelect={() => setFeedbackOpen(true)}>
                 <MessageSquareText className="size-3.5" />
-                Send feedback
+                {translateUiText('Send feedback')}
               </DropdownMenuItem>
               <DropdownMenuItem onSelect={() => openExternalUrl(DOCS_URL)}>
                 <ExternalLink className="size-3.5" />
-                Docs
+                {translateUiText('Docs')}
               </DropdownMenuItem>
               {showAdminHelpOptions ? (
                 <>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onSelect={handleRestartOrca} disabled={isRestartingOrca}>
                     <RotateCw className="size-3.5" />
-                    Restart Orca
+                    {translateUiText('Restart Orca')}
                   </DropdownMenuItem>
                 </>
               ) : null}
@@ -173,7 +174,7 @@ const SidebarToolbar = React.memo(function SidebarToolbar() {
               </Button>
             </TooltipTrigger>
             <TooltipContent side="top" sideOffset={4}>
-              Settings
+              {translateUiText('Settings')}
             </TooltipContent>
           </Tooltip>
         </div>

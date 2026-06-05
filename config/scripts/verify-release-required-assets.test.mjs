@@ -48,9 +48,9 @@ describe('getRequiredReleaseAssetNames', () => {
   it('includes the Linux RPM alongside the existing AppImage and deb names', () => {
     expect(getRequiredReleaseAssetNames('v1.4.27')).toEqual(
       expect.arrayContaining([
-        'orca-linux.AppImage',
-        'orca-ide_1.4.27_amd64.deb',
-        'orca-ide-1.4.27.x86_64.rpm'
+        'orca-china-linux.AppImage',
+        'orca-china_1.4.27_amd64.deb',
+        'orca-china-1.4.27.x86_64.rpm'
       ])
     )
   })
@@ -63,11 +63,15 @@ describe('extractManifestAssetNames', () => {
         [
           'files:',
           '  - url: Orca-1.4.27-arm64-mac.zip',
-          '  - url: https://example.com/downloads/orca-windows-setup.exe',
-          'path: orca-linux.AppImage'
+          '  - url: https://example.com/downloads/orca-china-windows-setup.exe',
+          'path: orca-china-linux.AppImage'
         ].join('\n')
       )
-    ).toEqual(['Orca-1.4.27-arm64-mac.zip', 'orca-windows-setup.exe', 'orca-linux.AppImage'])
+    ).toEqual([
+      'Orca-1.4.27-arm64-mac.zip',
+      'orca-china-windows-setup.exe',
+      'orca-china-linux.AppImage'
+    ])
   })
 })
 

@@ -10,7 +10,7 @@ function makeProjectWithCli(content, mode = 0o755) {
   mkdirSync(path.dirname(cliPath), { recursive: true })
   writeFileSync(
     path.join(projectDir, 'package.json'),
-    JSON.stringify({ bin: { orca: './out/cli/index.js' } }),
+    JSON.stringify({ bin: { 'orca-china': './out/cli/index.js', 'orca-dev': './dev.js' } }),
     'utf8'
   )
   writeFileSync(cliPath, content, 'utf8')
@@ -34,7 +34,7 @@ describe('verifyPackageCliBin', () => {
   it('rejects an empty package bin target', () => {
     const { projectDir } = makeProjectWithCli('')
 
-    expect(() => verifyPackageCliBin({ projectDir })).toThrow('bin.orca target is empty')
+    expect(() => verifyPackageCliBin({ projectDir })).toThrow('bin.orca-china target is empty')
   })
 
   it('rejects package bin targets without a Node shebang', () => {

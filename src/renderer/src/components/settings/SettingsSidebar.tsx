@@ -1,4 +1,5 @@
 import type { RefObject } from 'react'
+import { useTranslation } from 'react-i18next'
 import { ArrowLeft, Search, Server } from 'lucide-react'
 import logo from '../../../../../resources/logo.svg'
 import type { RepoIcon } from '../../../../shared/repo-icon'
@@ -13,6 +14,7 @@ import { Input } from '../ui/input'
 import { SetupGuideProgressRing } from '../setup-guide/SetupGuideProgressRing'
 import { useSettingsSetupGuideProgress } from './settings-setup-guide-progress'
 import type { SettingsSetupGuideProgress } from './settings-setup-guide-progress'
+import { translateUiText } from '@/i18n/ui-text'
 
 type NavSection = {
   id: string
@@ -71,11 +73,15 @@ function SettingsSetupGuideNavRow({
   setupActive,
   onSelect
 }: SettingsSetupGuideRowProps): React.JSX.Element {
+  const { t } = useTranslation()
   return (
     <button
       type="button"
       aria-current={setupActive ? 'page' : undefined}
-      aria-label={`Onboarding checklist, ${progress.doneCount} of ${progress.total} done. Show setup guide.`}
+      aria-label={t('settingsSidebar.onboardingAriaLabel', {
+        done: progress.doneCount,
+        total: progress.total
+      })}
       onClick={(event) =>
         onSelect({
           metaKey: event.metaKey,
@@ -101,13 +107,18 @@ function SettingsSetupGuideNavRow({
         )}
       />
       <span className="flex min-w-0 flex-1 flex-col">
-        <span className="truncate text-[13px] font-medium leading-4">Onboarding checklist</span>
+        <span className="truncate text-[13px] font-medium leading-4">
+          {t('settingsSidebar.onboardingChecklist')}
+        </span>
       </span>
       <SetupGuideProgressRing
         done={progress.doneCount}
         total={progress.total}
         className="ml-auto shrink-0"
-        tooltipLabel={`${progress.doneCount}/${progress.total} complete`}
+        tooltipLabel={t('settingsSidebar.complete', {
+          done: progress.doneCount,
+          total: progress.total
+        })}
       />
     </button>
   )
@@ -124,6 +135,7 @@ export function SettingsSidebar({
   onSearchChange,
   onSelectSection
 }: SettingsSidebarProps): React.JSX.Element {
+  const { t } = useTranslation()
   const setupGuideProgress = useSettingsSetupGuideProgress(true)
   const setupActive = activeSectionId === 'setup-guide'
   const showSetupGuideTopRow = setupGuideProgress.doneCount < setupGuideProgress.total
@@ -138,11 +150,11 @@ export function SettingsSidebar({
   const installStatusLabel = (status: SettingsNavInstallStatus): string => {
     switch (status) {
       case 'install':
-        return 'Not installed'
+        return t('settingsSidebar.notInstalled')
       case 'installed':
-        return 'Installed'
+        return t('settingsSidebar.installed')
       case 'checking':
-        return 'Checking'
+        return t('settingsSidebar.checking')
     }
   }
   const installStatusClassName = (status: SettingsNavInstallStatus): string =>
@@ -165,7 +177,7 @@ export function SettingsSidebar({
           className="w-full justify-start gap-2 text-[13px] text-muted-foreground"
         >
           <ArrowLeft className="size-4" />
-          Back to app
+          {t('settingsSidebar.backToApp')}
         </Button>
       </div>
 
@@ -176,7 +188,7 @@ export function SettingsSidebar({
             ref={searchInputRef}
             value={searchQuery}
             onChange={(event) => onSearchChange(event.target.value)}
-            placeholder="Search settings"
+            placeholder={t('settingsSidebar.searchSettings')}
             className="pl-9 pr-14 text-[13px]"
           />
           {searchQuery === '' ? (
@@ -202,7 +214,7 @@ export function SettingsSidebar({
           {generalGroups.map((group) => (
             <div key={group.id} className="space-y-2">
               <p className="px-3 text-[11px] font-medium uppercase tracking-[0.18em] text-muted-foreground">
-                {group.title}
+                {translateUiText(group.title)}
               </p>
               <div className="space-y-1">
                 {group.sections
@@ -234,7 +246,7 @@ export function SettingsSidebar({
                           </span>
                         ) : section.badge ? (
                           <span className="ml-auto rounded-full bg-muted px-1.5 py-0.5 text-[9px] font-medium uppercase tracking-wider text-muted-foreground">
-                            {section.badge}
+                            {translateUiText(section.badge)}
                           </span>
                         ) : null}
                       </button>
@@ -246,7 +258,7 @@ export function SettingsSidebar({
 
           <div className="space-y-2">
             <p className="px-3 text-[11px] font-medium uppercase tracking-[0.18em] text-muted-foreground">
-              Projects
+              {t('settingsSidebar.projects')}
             </p>
 
             {repoSections.length > 0 ? (
@@ -280,7 +292,7 @@ export function SettingsSidebar({
                       {section.isRemote && (
                         <span className="ml-auto inline-flex shrink-0 items-center gap-1 text-[10px] text-muted-foreground">
                           <Server className="size-3" />
-                          SSH
+                          {t('settingsSidebar.ssh')}
                         </span>
                       )}
                     </button>
@@ -289,7 +301,9 @@ export function SettingsSidebar({
               </div>
             ) : (
               <p className="px-3 text-xs text-muted-foreground">
-                {hasRepos ? 'No matching project settings.' : 'No projects added yet.'}
+                {hasRepos
+                  ? t('settingsSidebar.noMatchingProjects')
+                  : t('settingsSidebar.noProjectsAdded')}
               </p>
             )}
           </div>

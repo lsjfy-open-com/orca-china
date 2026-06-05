@@ -4,6 +4,7 @@ import { cn } from '@/lib/utils'
 import { useAppStore } from '../../store'
 import type { SettingsSearchEntry } from './settings-search'
 import { matchesSettingsSearch } from './settings-search'
+import { translateUiText } from '@/i18n/ui-text'
 
 // Why: avoids threading `activeSectionId` through every <SettingsSection /> call
 // site in Settings.tsx — the page wraps its content tree in this provider.
@@ -48,6 +49,9 @@ export function SettingsSection({
   headerAction
 }: SettingsSectionProps): React.JSX.Element | null {
   const query = useAppStore((state) => state.settingsSearchQuery)
+  const localizedTitle = translateUiText(title)
+  const localizedDescription = translateUiText(description)
+  const localizedBadge = badge ? translateUiText(badge) : undefined
   const activeFromContext = useContext(ActiveSettingsSectionContext)
   const sectionIsActive = isActive ?? activeFromContext === id
   const hasQuery = query.trim() !== ''
@@ -67,15 +71,17 @@ export function SettingsSection({
       <div className="flex flex-wrap items-start justify-between gap-4 border-b border-border/60 pb-5">
         <div className="min-w-0 space-y-2">
           <h2 className="flex flex-wrap items-center gap-2 text-2xl font-semibold leading-tight text-foreground">
-            {title}
+            {localizedTitle}
             {badge ? (
               <span className="rounded-full bg-muted px-2 py-0.5 text-[10px] font-medium uppercase tracking-[0.05em] text-muted-foreground">
-                {badge}
+                {localizedBadge}
               </span>
             ) : null}
             {badgeAccessory}
           </h2>
-          <p className="max-w-2xl text-sm leading-6 text-muted-foreground">{description}</p>
+          <p className="max-w-2xl text-sm leading-6 text-muted-foreground">
+            {localizedDescription}
+          </p>
         </div>
         {headerAction ? <div className="shrink-0">{headerAction}</div> : null}
       </div>
