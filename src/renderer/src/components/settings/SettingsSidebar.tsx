@@ -1,0 +1,314 @@
+import type { RefObject } from 'react'
+import { useTranslation } from 'react-i18next'
+import { ArrowLeft, Search, Server } from 'lucide-react'
+import logo from '../../../../../resources/logo.svg'
+import type { RepoIcon } from '../../../../shared/repo-icon'
+import type { SettingsNavIcon, SettingsNavInstallStatus } from '@/lib/settings-navigation-types'
+import type { GitHubRepositoryIdentity } from '../../../../shared/types'
+import { useShortcutLabel } from '@/hooks/useShortcutLabel'
+import { cn } from '@/lib/utils'
+import { RepoIconGlyph } from '../repo/repo-icon'
+import { RepoForkIndicator } from '../repo/repo-fork-indicator'
+import { Button } from '../ui/button'
+import { Input } from '../ui/input'
+import { SetupGuideProgressRing } from '../setup-guide/SetupGuideProgressRing'
+import { useSettingsSetupGuideProgress } from './settings-setup-guide-progress'
+import type { SettingsSetupGuideProgress } from './settings-setup-guide-progress'
+import { translateUiText } from '@/i18n/ui-text'
+
+type NavSection = {
+  id: string
+  title: string
+  icon: SettingsNavIcon
+  badge?: string
+  installStatus?: SettingsNavInstallStatus
+}
+
+type NavGroup = {
+  id: string
+  title: string
+  sections: NavSection[]
+}
+
+type RepoNavSection = NavSection & {
+  badgeColor?: string
+  isRemote?: boolean
+  repoIcon?: RepoIcon | null
+  upstream?: GitHubRepositoryIdentity | null
+}
+
+type SettingsSidebarProps = {
+  activeSectionId: string
+  generalGroups: NavGroup[]
+  repoSections: RepoNavSection[]
+  hasRepos: boolean
+  searchQuery: string
+  searchInputRef?: RefObject<HTMLInputElement | null>
+  onBack: () => void
+  onSearchChange: (query: string) => void
+  onSelectSection: (
+    sectionId: string,
+    modifiers: {
+      metaKey: boolean
+      ctrlKey: boolean
+      shiftKey: boolean
+      altKey: boolean
+    }
+  ) => void
+}
+
+type SettingsSetupGuideRowProps = {
+  progress: SettingsSetupGuideProgress
+  setupActive: boolean
+  onSelect: (modifiers: {
+    metaKey: boolean
+    ctrlKey: boolean
+    shiftKey: boolean
+    altKey: boolean
+  }) => void
+}
+
+function SettingsSetupGuideNavRow({
+  progress,
+  setupActive,
+  onSelect
+}: SettingsSetupGuideRowProps): React.JSX.Element {
+  const { t } = useTranslation()
+  return (
+    <button
+      type="button"
+      aria-current={setupActive ? 'page' : undefined}
+      aria-label={t('settingsSidebar.onboardingAriaLabel', {
+        done: progress.doneCount,
+        total: progress.total
+      })}
+      onClick={(event) =>
+        onSelect({
+          metaKey: event.metaKey,
+          ctrlKey: event.ctrlKey,
+          shiftKey: event.shiftKey,
+          altKey: event.altKey
+        })
+      }
+      className={cn(
+        'flex w-full items-center gap-2 rounded-lg px-2.5 py-2 text-left outline-none transition-colors focus-visible:ring-[3px] focus-visible:ring-ring/50',
+        setupActive
+          ? 'bg-accent font-medium text-accent-foreground'
+          : 'text-muted-foreground hover:bg-muted/60 hover:text-foreground'
+      )}
+    >
+      <img
+        src={logo}
+        alt=""
+        aria-hidden="true"
+        className={cn(
+          'size-4 shrink-0 object-contain invert dark:invert-0',
+          setupActive ? 'opacity-75' : 'opacity-45'
+        )}
+      />
+      <span className="flex min-w-0 flex-1 flex-col">
+        <span className="truncate text-[13px] font-medium leading-4">
+          {t('settingsSidebar.onboardingChecklist')}
+        </span>
+      </span>
+      <SetupGuideProgressRing
+        done={progress.doneCount}
+        total={progress.total}
+        className="ml-auto shrink-0"
+        tooltipLabel={t('settingsSidebar.complete', {
+          done: progress.doneCount,
+          total: progress.total
+        })}
+      />
+    </button>
+  )
+}
+
+export function SettingsSidebar({
+  activeSectionId,
+  generalGroups,
+  repoSections,
+  hasRepos,
+  searchQuery,
+  searchInputRef,
+  onBack,
+  onSearchChange,
+  onSelectSection
+}: SettingsSidebarProps): React.JSX.Element {
+  const { t } = useTranslation()
+  const setupGuideProgress = useSettingsSetupGuideProgress(true)
+  const setupActive = activeSectionId === 'setup-guide'
+  const showSetupGuideTopRow = setupGuideProgress.doneCount < setupGuideProgress.total
+  const searchShortcutHint = useShortcutLabel('settings.search')
+  const navItemClassName = (isActive: boolean): string =>
+    cn(
+      'flex w-full items-center gap-2 rounded-lg px-3 py-1.5 text-left text-[13px] outline-none transition-colors focus-visible:ring-[3px] focus-visible:ring-ring/50',
+      isActive
+        ? 'bg-accent font-medium text-accent-foreground'
+        : 'text-muted-foreground hover:bg-muted/60 hover:text-foreground'
+    )
+  const installStatusLabel = (status: SettingsNavInstallStatus): string => {
+    switch (status) {
+      case 'install':
+        return t('settingsSidebar.notInstalled')
+      case 'installed':
+        return t('settingsSidebar.installed')
+      case 'checking':
+        return t('settingsSidebar.checking')
+    }
+  }
+  const installStatusClassName = (status: SettingsNavInstallStatus): string =>
+    cn(
+      'ml-auto shrink-0 rounded-full border px-1.5 py-0.5 text-[10px] font-medium leading-none',
+      status === 'installed'
+        ? 'border-status-success-border bg-status-success-background text-status-success'
+        : status === 'install'
+          ? 'border-foreground/15 bg-foreground/10 text-foreground'
+          : 'border-border/50 bg-muted/30 text-muted-foreground'
+    )
+
+  return (
+    <aside className="flex w-[280px] shrink-0 flex-col border-r border-border/50 bg-card/40">
+      <div className="border-b border-border/50 px-3 py-3">
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={onBack}
+          className="w-full justify-start gap-2 text-[13px] text-muted-foreground"
+        >
+          <ArrowLeft className="size-4" />
+          {t('settingsSidebar.backToApp')}
+        </Button>
+      </div>
+
+      <div className="border-b border-border/50 px-3 py-3">
+        <div className="relative">
+          <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+          <Input
+            ref={searchInputRef}
+            value={searchQuery}
+            onChange={(event) => onSearchChange(event.target.value)}
+            placeholder={t('settingsSidebar.searchSettings')}
+            className="pl-9 pr-14 text-[13px]"
+          />
+          {searchQuery === '' ? (
+            <kbd className="pointer-events-none absolute right-2 top-1/2 inline-flex -translate-y-1/2 items-center rounded border border-border/60 bg-background/40 px-1.5 py-px font-mono text-[10px] font-medium text-muted-foreground">
+              {searchShortcutHint}
+            </kbd>
+          ) : null}
+        </div>
+      </div>
+
+      {showSetupGuideTopRow ? (
+        <div className="border-b border-border/50 px-3 py-3">
+          <SettingsSetupGuideNavRow
+            progress={setupGuideProgress}
+            setupActive={setupActive}
+            onSelect={(modifiers) => onSelectSection('setup-guide', modifiers)}
+          />
+        </div>
+      ) : null}
+
+      <div className="min-h-0 flex-1 overflow-y-auto scrollbar-sleek px-3 py-4">
+        <div className="space-y-5">
+          {generalGroups.map((group) => (
+            <div key={group.id} className="space-y-2">
+              <p className="px-3 text-[11px] font-medium uppercase tracking-[0.18em] text-muted-foreground">
+                {translateUiText(group.title)}
+              </p>
+              <div className="space-y-1">
+                {group.sections
+                  .filter((section) => section.id !== 'setup-guide')
+                  .map((section) => {
+                    const Icon = section.icon
+                    const isActive = activeSectionId === section.id
+
+                    return (
+                      <button
+                        key={section.id}
+                        aria-current={isActive ? 'page' : undefined}
+                        data-current={isActive ? 'true' : undefined}
+                        onClick={(event) =>
+                          onSelectSection(section.id, {
+                            metaKey: event.metaKey,
+                            ctrlKey: event.ctrlKey,
+                            shiftKey: event.shiftKey,
+                            altKey: event.altKey
+                          })
+                        }
+                        className={navItemClassName(isActive)}
+                      >
+                        <Icon className="size-4 shrink-0" />
+                        <span className="truncate">{section.title}</span>
+                        {section.installStatus ? (
+                          <span className={installStatusClassName(section.installStatus)}>
+                            {installStatusLabel(section.installStatus)}
+                          </span>
+                        ) : section.badge ? (
+                          <span className="ml-auto rounded-full bg-muted px-1.5 py-0.5 text-[9px] font-medium uppercase tracking-wider text-muted-foreground">
+                            {translateUiText(section.badge)}
+                          </span>
+                        ) : null}
+                      </button>
+                    )
+                  })}
+              </div>
+            </div>
+          ))}
+
+          <div className="space-y-2">
+            <p className="px-3 text-[11px] font-medium uppercase tracking-[0.18em] text-muted-foreground">
+              {t('settingsSidebar.projects')}
+            </p>
+
+            {repoSections.length > 0 ? (
+              <div className="space-y-1">
+                {repoSections.map((section) => {
+                  const isActive = activeSectionId === section.id
+
+                  return (
+                    <button
+                      key={section.id}
+                      aria-current={isActive ? 'page' : undefined}
+                      data-current={isActive ? 'true' : undefined}
+                      onClick={(event) =>
+                        onSelectSection(section.id, {
+                          metaKey: event.metaKey,
+                          ctrlKey: event.ctrlKey,
+                          shiftKey: event.shiftKey,
+                          altKey: event.altKey
+                        })
+                      }
+                      className={navItemClassName(isActive)}
+                    >
+                      <RepoIconGlyph
+                        repoIcon={section.repoIcon}
+                        color={section.badgeColor}
+                        className="size-4 shrink-0 text-muted-foreground"
+                        iconClassName="size-3.5"
+                      />
+                      <span className="truncate">{section.title}</span>
+                      <RepoForkIndicator upstream={section.upstream} />
+                      {section.isRemote && (
+                        <span className="ml-auto inline-flex shrink-0 items-center gap-1 text-[10px] text-muted-foreground">
+                          <Server className="size-3" />
+                          {t('settingsSidebar.ssh')}
+                        </span>
+                      )}
+                    </button>
+                  )
+                })}
+              </div>
+            ) : (
+              <p className="px-3 text-xs text-muted-foreground">
+                {hasRepos
+                  ? t('settingsSidebar.noMatchingProjects')
+                  : t('settingsSidebar.noProjectsAdded')}
+              </p>
+            )}
+          </div>
+        </div>
+      </div>
+    </aside>
+  )
+}

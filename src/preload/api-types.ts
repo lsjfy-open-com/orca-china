@@ -1,0 +1,2455 @@
+/* eslint-disable max-lines -- Why: the preload contract is intentionally centralized in one declaration file so renderer and preload stay in lockstep when IPC surfaces change. */
+import type {
+  CreateHostedReviewArgs,
+  CreateHostedReviewResult,
+  HostedReviewCreationEligibility,
+  HostedReviewCreationEligibilityArgs,
+  HostedReviewForBranchArgs,
+  HostedReviewInfo
+} from '../shared/hosted-review'
+import type { NativeFileDropPayload } from '../shared/native-file-drop'
+import type { AppIdentity } from '../shared/app-identity'
+import type { TerminalPaneSplitSource } from '../shared/feature-education-telemetry'
+import type {
+  BaseRefDefaultResult,
+  BaseRefSearchResult,
+  BrowserCookieImportResult,
+  BrowserLoadError,
+  BrowserSessionProfile,
+  BrowserSessionProfileScope,
+  BrowserSessionProfileSource,
+  BrowserViewportOverride,
+  ClaudeRateLimitAccountsState,
+  ClassifiedError,
+  CodexRateLimitAccountsState,
+  CreateWorktreeArgs,
+  CreateWorktreeResult,
+  CustomPet,
+  DetectedWorktreeListResult,
+  DirEntry,
+  ForceDeleteWorktreeBranchResult,
+  FsChangedPayload,
+  GhosttyImportPreview,
+  GlobalSettings,
+  GitBranchCompareResult,
+  GitCommitCompareResult,
+  GitConflictOperation,
+  GitDiffResult,
+  GitPushTarget,
+  GitStatusResult,
+  GitUpstreamStatus,
+  GitHubAssignableUser,
+  GitHubPRFile,
+  GitHubPRFileContents,
+  GitHubPrStartPoint,
+  GitHubPRReviewCommentInput,
+  GitHubCommentResult,
+  GitHubOwnerRepo,
+  GitHubWorkItem,
+  GitHubWorkItemDetails,
+  GitHubViewer,
+  GitLabAssignableUser,
+  GitLabAuthDiagnostic,
+  GitLabCommentResult,
+  GitLabDiscussionResolveResult,
+  GitLabIssueInfo,
+  GitLabIssueUpdate,
+  GitLabJobTraceResult,
+  GitLabMRInlineCommentInput,
+  GitLabMRReviewersUpdateResult,
+  GitLabMRUpdate,
+  GitLabProjectRef,
+  GitLabRetryJobResult,
+  GitLabTodo,
+  GitLabViewer,
+  GitLabWorkItem,
+  GitLabWorkItemDetails,
+  GetGitLabRateLimitResult,
+  ListMergeRequestsResult,
+  MRInfo,
+  MRListState,
+  ListWorkItemsResult,
+  IssueInfo,
+  JiraComment,
+  JiraConnectionStatus,
+  JiraCreateField,
+  JiraCreateIssueArgs,
+  JiraIssue,
+  JiraIssueFilter,
+  JiraIssueType,
+  JiraIssueUpdate,
+  JiraPriority,
+  JiraProject,
+  JiraSiteSelection,
+  JiraTransition,
+  JiraUser,
+  JiraViewer,
+  LinearViewer,
+  LinearCollectionResult,
+  LinearConnectionStatus,
+  LinearCustomViewModel,
+  LinearCustomViewSummary,
+  LinearWorkspaceSelection,
+  LinearIssue,
+  LinearIssueUpdate,
+  LinearComment,
+  LinearWorkflowState,
+  LinearLabel,
+  LinearMember,
+  LinearProjectDetail,
+  LinearProjectSummary,
+  LinearTeam,
+  MarkdownDocument,
+  FloatingTerminalCwdRequest,
+  GitHubIssueUpdate,
+  GitHubPRRefreshCandidate,
+  GitHubPRRefreshEvent,
+  GitHubPRRefreshReason,
+  GetRateLimitResult,
+  NotificationDispatchRequest,
+  NotificationDispatchResult,
+  NotificationDismissResult,
+  NotificationPermissionStatusResult,
+  NotificationSoundResult,
+  OnboardingState,
+  OrcaHooks,
+  PathSource,
+  PersistedUIState,
+  PRCheckDetail,
+  PRCheckRunDetails,
+  PRComment,
+  PRInfo,
+  PRRefreshOutcome,
+  Repo,
+  ProjectGroup,
+  ProjectGroupImportResult,
+  ProjectGroupImportMode,
+  ShellHydrationFailureReason,
+  SparsePreset,
+  SearchOptions,
+  NestedRepoScanResult,
+  SearchResult,
+  StatsSummary,
+  MemorySnapshot,
+  UpdateStatus,
+  Worktree,
+  WorktreeBaseStatusEvent,
+  WorktreeLineage,
+  WorktreeMeta,
+  WorktreeRemoteBranchConflictEvent,
+  RemoveWorktreeResult,
+  WorktreeDefaultTabsLaunch,
+  WorktreeSetupLaunch,
+  WorktreeStartupLaunch,
+  WorkspaceSessionPatch,
+  WorkspaceSessionState
+} from '../shared/types'
+import type { SetupScriptImportCandidate } from '../shared/setup-script-imports'
+import type { GitHistoryOptions, GitHistoryResult } from '../shared/git-history'
+import type { PublicKnownRuntimeEnvironment } from '../shared/runtime-environments'
+import type { RuntimeAccessGrant } from '../shared/runtime-access-grants'
+import type { RuntimeRpcResponse } from '../shared/runtime-rpc-envelope'
+import type { FeatureInteractionId } from '../shared/feature-interactions'
+import type {
+  AddIssueCommentBySlugArgs,
+  ClearProjectItemFieldArgs,
+  DeleteIssueCommentBySlugArgs,
+  GetProjectViewTableArgs,
+  GetProjectViewTableResult,
+  GitHubProjectCommentMutationResult,
+  GitHubProjectMutationResult,
+  ListAccessibleProjectsResult,
+  ListAssignableUsersBySlugArgs,
+  ListAssignableUsersBySlugResult,
+  ListIssueTypesBySlugArgs,
+  ListIssueTypesBySlugResult,
+  ListLabelsBySlugArgs,
+  ListLabelsBySlugResult,
+  ListProjectViewsArgs,
+  ListProjectViewsResult,
+  ProjectWorkItemDetailsBySlugArgs,
+  ProjectWorkItemDetailsBySlugResult,
+  ResolveProjectRefArgs,
+  ResolveProjectRefResult,
+  UpdateIssueBySlugArgs,
+  UpdateIssueCommentBySlugArgs,
+  UpdateIssueTypeBySlugArgs,
+  UpdatePullRequestBySlugArgs,
+  UpdateProjectItemFieldArgs
+} from '../shared/github-project-types'
+import type { RichMarkdownContextMenuCommandPayload } from '../shared/rich-markdown-context-menu'
+import type {
+  BrowserSetGrabModeArgs,
+  BrowserSetGrabModeResult,
+  BrowserAwaitGrabSelectionArgs,
+  BrowserGrabResult,
+  BrowserCancelGrabArgs,
+  BrowserCaptureSelectionScreenshotArgs,
+  BrowserCaptureSelectionScreenshotResult,
+  BrowserExtractHoverArgs,
+  BrowserExtractHoverResult
+} from '../shared/browser-grab-types'
+import type {
+  BrowserContextMenuDismissedEvent,
+  BrowserContextMenuRequestedEvent,
+  BrowserDownloadFinishedEvent,
+  BrowserDownloadProgressEvent,
+  BrowserDownloadRequestedEvent,
+  BrowserPermissionDeniedEvent,
+  BrowserPopupEvent
+} from '../shared/browser-guest-events'
+import type { ElectronAPI } from '@electron-toolkit/preload'
+import type { BrowserSetAnnotationViewportBridgeArgs } from '../shared/browser-annotation-viewport-bridge'
+import type { CliInstallStatus } from '../shared/cli-install-types'
+import type { E2EConfig } from '../shared/e2e-config'
+import type { AgentHookInstallStatus } from '../shared/agent-hook-types'
+import type {
+  AgentStatusIpcPayload,
+  MigrationUnsupportedPtyEntry
+} from '../shared/agent-status-types'
+import type { AgentInterruptInferenceRequest } from '../shared/agent-interrupt-intent'
+import type {
+  RuntimeBrowserDriverState,
+  RuntimeMobileSessionTabMove,
+  RuntimeStatus,
+  RuntimeSyncWindowGraphResult,
+  RuntimeSyncWindowGraph,
+  RuntimeTerminalDriverState
+} from '../shared/runtime-types'
+import type {
+  CommitMessageAgentCapability,
+  CommitMessageModelCapability
+} from '../shared/commit-message-agent-spec'
+import type { ShellOpenLocalPathResult } from '../shared/shell-open-types'
+import type { SkillDiscoveryResult, SkillDiscoveryTarget } from '../shared/skills'
+import type {
+  CrashReportBreadcrumbData,
+  CrashReportRecord,
+  CrashReportSubmitArgs,
+  CrashReportSubmitResult,
+  ReactErrorBoundaryReportArgs,
+  ReactErrorBoundaryReportResult
+} from '../shared/crash-reporting'
+
+export type { ShellOpenLocalPathResult } from '../shared/shell-open-types'
+
+type RuntimeEnvironmentSubscriptionHandle = {
+  unsubscribe: () => void
+  sendBinary: (bytes: Uint8Array<ArrayBufferLike>) => void
+}
+import type {
+  RuntimeMobileMarkdownRequest,
+  RuntimeMobileMarkdownResponse
+} from '../shared/mobile-markdown-document'
+import type {
+  DeveloperPermissionId,
+  DeveloperPermissionRequestResult,
+  DeveloperPermissionState
+} from '../shared/developer-permissions-types'
+import type {
+  ComputerUsePermissionId,
+  ComputerUsePermissionResetResult,
+  ComputerUsePermissionSetupResult,
+  ComputerUsePermissionStatusResult
+} from '../shared/computer-use-permissions-types'
+import type {
+  ClaudeUsageBreakdownKind,
+  ClaudeUsageBreakdownRow,
+  ClaudeUsageDailyPoint,
+  ClaudeUsageRange,
+  ClaudeUsageScanState,
+  ClaudeUsageScope,
+  ClaudeUsageSessionRow,
+  ClaudeUsageSnapshot,
+  ClaudeUsageSummary
+} from '../shared/claude-usage-types'
+import type { RateLimitRuntimeTarget, RateLimitState } from '../shared/rate-limit-types'
+import type {
+  SpeechErrorEvent,
+  SpeechLifecycleEvent,
+  SpeechModelManifest,
+  SpeechModelState,
+  SpeechTranscriptEvent
+} from '../shared/speech-types'
+import type {
+  WorkspaceSpaceAnalyzeResult,
+  WorkspaceSpaceScanProgress
+} from '../shared/workspace-space-types'
+import type {
+  WorkspacePortAdvertisedUrlChangedEvent,
+  WorkspacePortKillRequest,
+  WorkspacePortKillResult,
+  WorkspacePortScanRequest,
+  WorkspacePortScanResult
+} from '../shared/workspace-ports'
+import type { GhAuthDiagnostic } from '../shared/github-auth-types'
+import type {
+  SshConnectionState,
+  SshTarget,
+  PortForwardEntry,
+  EnrichedDetectedPort
+} from '../shared/ssh-types'
+import type {
+  CodexUsageBreakdownKind,
+  CodexUsageBreakdownRow,
+  CodexUsageDailyPoint,
+  CodexUsageRange,
+  CodexUsageScanState,
+  CodexUsageScope,
+  CodexUsageSessionRow,
+  CodexUsageSnapshot,
+  CodexUsageSummary
+} from '../shared/codex-usage-types'
+import type {
+  OpenCodeUsageBreakdownKind,
+  OpenCodeUsageBreakdownRow,
+  OpenCodeUsageDailyPoint,
+  OpenCodeUsageRange,
+  OpenCodeUsageScanState,
+  OpenCodeUsageScope,
+  OpenCodeUsageSessionRow,
+  OpenCodeUsageSnapshot,
+  OpenCodeUsageSummary
+} from '../shared/opencode-usage-types'
+import type { TelemetryConsentState } from '../shared/telemetry-consent-types'
+import type { AgentKind, LaunchSource, RequestKind } from '../shared/telemetry-events'
+import type { AppStarSource } from '../shared/gh-star-source'
+import type {
+  RemoteWorkspaceChangedEvent,
+  RemoteWorkspaceConnectedClient,
+  RemoteWorkspacePatchResult,
+  RemoteWorkspaceSnapshot
+} from '../shared/remote-workspace-types'
+import type {
+  Automation,
+  AutomationCreateInput,
+  AutomationDispatchRequest,
+  AutomationDispatchResult,
+  ExternalAutomationCreateInput,
+  ExternalAutomationActionInput,
+  ExternalAutomationManager,
+  ExternalAutomationRunsInput,
+  ExternalAutomationRunsPage,
+  ExternalAutomationUpdateInput,
+  AutomationRun,
+  AutomationPrecheckResult,
+  AutomationUpdateInput
+} from '../shared/automations-types'
+import type {
+  WorkspaceCleanupDismissArgs,
+  WorkspaceCleanupLocalProcessArgs,
+  WorkspaceCleanupLocalProcessResult,
+  WorkspaceCleanupScanArgs,
+  WorkspaceCleanupScanResult
+} from '../shared/workspace-cleanup'
+import type { KeybindingActionId, KeybindingFileSnapshot } from '../shared/keybindings'
+
+export type BrowserApi = {
+  registerGuest: (args: {
+    browserPageId: string
+    workspaceId: string
+    worktreeId: string
+    sessionProfileId?: string | null
+    webContentsId: number
+  }) => Promise<void>
+  unregisterGuest: (args: { browserPageId: string }) => Promise<void>
+  openDevTools: (args: { browserPageId: string }) => Promise<boolean>
+  setViewportOverride: (args: {
+    browserPageId: string
+    override: BrowserViewportOverride | null
+  }) => Promise<boolean>
+  setAnnotationViewportBridge: (args: BrowserSetAnnotationViewportBridgeArgs) => Promise<boolean>
+  onGuestLoadFailed: (
+    callback: (args: { browserPageId: string; loadError: BrowserLoadError }) => void
+  ) => () => void
+  onPermissionDenied: (callback: (event: BrowserPermissionDeniedEvent) => void) => () => void
+  onPopup: (callback: (event: BrowserPopupEvent) => void) => () => void
+  onDownloadRequested: (callback: (event: BrowserDownloadRequestedEvent) => void) => () => void
+  onDownloadProgress: (callback: (event: BrowserDownloadProgressEvent) => void) => () => void
+  onDownloadFinished: (callback: (event: BrowserDownloadFinishedEvent) => void) => () => void
+  onContextMenuRequested: (
+    callback: (event: BrowserContextMenuRequestedEvent) => void
+  ) => () => void
+  onContextMenuDismissed: (
+    callback: (event: BrowserContextMenuDismissedEvent) => void
+  ) => () => void
+  onNavigationUpdate: (
+    callback: (event: { browserPageId: string; url: string; title: string }) => void
+  ) => () => void
+  onActivateView: (
+    callback: (data: { worktreeId?: string; browserPageId?: string }) => void
+  ) => () => void
+  onPaneFocus: (
+    callback: (data: { worktreeId: string | null; browserPageId: string }) => void
+  ) => () => void
+  onOpenLinkInOrcaTab: (
+    callback: (event: { browserPageId: string; url: string }) => void
+  ) => () => void
+  acceptDownload: (args: {
+    downloadId: string
+  }) => Promise<{ ok: true } | { ok: false; reason: string }>
+  cancelDownload: (args: { downloadId: string }) => Promise<boolean>
+  setGrabMode: (args: BrowserSetGrabModeArgs) => Promise<BrowserSetGrabModeResult>
+  awaitGrabSelection: (args: BrowserAwaitGrabSelectionArgs) => Promise<BrowserGrabResult>
+  cancelGrab: (args: BrowserCancelGrabArgs) => Promise<boolean>
+  captureSelectionScreenshot: (
+    args: BrowserCaptureSelectionScreenshotArgs
+  ) => Promise<BrowserCaptureSelectionScreenshotResult>
+  extractHoverPayload: (args: BrowserExtractHoverArgs) => Promise<BrowserExtractHoverResult>
+  onGrabModeToggle: (callback: (browserPageId: string) => void) => () => void
+  onGrabActionShortcut: (
+    callback: (args: { browserPageId: string; key: 'c' | 's' }) => void
+  ) => () => void
+  sessionListProfiles: () => Promise<BrowserSessionProfile[]>
+  sessionCreateProfile: (args: {
+    scope: BrowserSessionProfileScope
+    label: string
+  }) => Promise<BrowserSessionProfile | null>
+  sessionDeleteProfile: (args: { profileId: string }) => Promise<boolean>
+  sessionImportCookies: (args: { profileId: string }) => Promise<BrowserCookieImportResult>
+  sessionResolvePartition: (args: { profileId: string | null }) => Promise<string | null>
+  sessionDetectBrowsers: () => Promise<DetectedBrowserInfo[]>
+  sessionImportFromBrowser: (args: {
+    profileId: string
+    browserFamily: string
+    browserProfile?: string
+  }) => Promise<BrowserCookieImportResult>
+  sessionClearDefaultCookies: () => Promise<boolean>
+  notifyActiveTabChanged: (args: { browserPageId: string }) => Promise<boolean>
+}
+
+export type DetectedBrowserProfileInfo = {
+  name: string
+  directory: string
+}
+
+export type DetectedBrowserInfo = {
+  family: BrowserSessionProfileSource['browserFamily']
+  label: string
+  profiles: DetectedBrowserProfileInfo[]
+  selectedProfile: string
+}
+
+export type PreflightStatus = {
+  git: { installed: boolean }
+  gh: { installed: boolean; authenticated: boolean }
+  /** Optional — older preload payloads predating GitLab support don't
+   *  include it. Consumers gate on `glab?.installed` / `authenticated`. */
+  glab?: { installed: boolean; authenticated: boolean }
+  bitbucket?: { configured: boolean; authenticated: boolean; account: string | null }
+  azureDevOps?: {
+    configured: boolean
+    authenticated: boolean
+    account: string | null
+    baseUrl: string | null
+    tokenConfigured: boolean
+  }
+  gitea?: {
+    configured: boolean
+    authenticated: boolean
+    account: string | null
+    baseUrl: string | null
+    tokenConfigured: boolean
+  }
+}
+
+export type RefreshAgentsResult = {
+  agents: string[]
+  addedPathSegments: string[]
+  shellHydrationOk: boolean
+  /** Why: drives the agent_picks `on_path:false` triage in dashboard 1562016
+   *  (insight A). `'shell_hydrate'` = detection saw the user's full shell PATH;
+   *  `'sync_seed_only'` = hydration failed and detection ran against the
+   *  seed list from `patchPackagedProcessPath`. */
+  pathSource: PathSource
+  /** Why: classified hydration outcome. `'none'` on success; one of the failure
+   *  modes when `shellHydrationOk` is false. Typed off the shared alias so
+   *  schema/main/preload/renderer stay in lockstep. */
+  pathFailureReason: ShellHydrationFailureReason
+}
+
+export type PreflightApi = {
+  check: (args?: {
+    force?: boolean
+    wslDistro?: string | null
+    wslDefault?: boolean
+  }) => Promise<PreflightStatus>
+  detectAgents: (args?: { wslDistro?: string | null; wslDefault?: boolean }) => Promise<string[]>
+  refreshAgents: (args?: {
+    wslDistro?: string | null
+    wslDefault?: boolean
+  }) => Promise<RefreshAgentsResult>
+  detectRemoteAgents: (args: { connectionId: string }) => Promise<string[]>
+}
+
+// Why: renderer-facing mirror of the daemon's `SessionInfo` + protocolVersion
+// annotation (src/main/daemon/types.ts `DaemonSessionInfo`). Kept here instead
+// of imported from main because the preload boundary must not depend on
+// main-only protocol types — those are subprocess-facing. Keep the two shapes
+// in sync when adding fields on either side; the Manage Sessions panel reads
+// these directly.
+export type PtyManagementSession = {
+  sessionId: string
+  state: 'created' | 'spawning' | 'running' | 'exiting' | 'exited'
+  shellState: 'pending' | 'ready' | 'timed_out' | 'unsupported'
+  isAlive: boolean
+  pid: number | null
+  cwd: string | null
+  cols: number
+  rows: number
+  createdAt: number
+  protocolVersion: number
+}
+
+export type PtyManagementApi = {
+  listSessions: () => Promise<{ sessions: PtyManagementSession[] }>
+  killAll: () => Promise<{ killedCount: number; remainingCount: number }>
+  killOne: (args: { sessionId: string }) => Promise<{ success: boolean }>
+  restart: () => Promise<{ success: boolean }>
+}
+
+export type ExportApi = {
+  htmlToPdf: (args: {
+    html: string
+    title: string
+  }) => Promise<
+    { success: true; filePath: string } | { success: false; cancelled?: boolean; error?: string }
+  >
+}
+
+export type StatsApi = {
+  getSummary: () => Promise<StatsSummary>
+}
+
+// Diagnostics — error-tracking-lane payload shapes that cross the IPC
+// boundary. Mirror the runtime types in
+// `src/main/observability/{index,bundle}.ts`. Kept here, not imported,
+// because the preload api-types file is the source of truth for the
+// renderer's view of the IPC surface.
+export type DiagnosticsStatusPayload = {
+  readonly localFileEnabled: boolean
+  readonly otlpEnabled: boolean
+  readonly bundleEnabled: boolean
+  readonly otlpStatus: string
+  readonly traceFilePath: string
+  readonly traceFamilySize: number
+  readonly disabledReason?:
+    | 'do_not_track'
+    | 'orca_telemetry_disabled'
+    | 'orca_diagnostics_disabled'
+    | 'ci'
+}
+export type DiagnosticsBundlePayload = {
+  readonly bundleSubmissionId: string
+  readonly bytes: number
+  readonly spanCount: number
+}
+export type DiagnosticsUploadPayload = {
+  readonly ticketId: string
+}
+
+export type MemoryApi = {
+  getSnapshot: () => Promise<MemorySnapshot>
+}
+
+export type ClaudeUsageApi = {
+  getScanState: () => Promise<ClaudeUsageScanState>
+  setEnabled: (args: { enabled: boolean }) => Promise<ClaudeUsageScanState>
+  refresh: (args?: { force?: boolean }) => Promise<ClaudeUsageScanState>
+  getSnapshot: (args: {
+    scope: ClaudeUsageScope
+    range: ClaudeUsageRange
+    limit?: number
+  }) => Promise<ClaudeUsageSnapshot>
+  getSummary: (args: {
+    scope: ClaudeUsageScope
+    range: ClaudeUsageRange
+  }) => Promise<ClaudeUsageSummary>
+  getDaily: (args: {
+    scope: ClaudeUsageScope
+    range: ClaudeUsageRange
+  }) => Promise<ClaudeUsageDailyPoint[]>
+  getBreakdown: (args: {
+    scope: ClaudeUsageScope
+    range: ClaudeUsageRange
+    kind: ClaudeUsageBreakdownKind
+  }) => Promise<ClaudeUsageBreakdownRow[]>
+  getRecentSessions: (args: {
+    scope: ClaudeUsageScope
+    range: ClaudeUsageRange
+    limit?: number
+  }) => Promise<ClaudeUsageSessionRow[]>
+}
+
+export type CodexUsageApi = {
+  getScanState: () => Promise<CodexUsageScanState>
+  setEnabled: (args: { enabled: boolean }) => Promise<CodexUsageScanState>
+  refresh: (args?: { force?: boolean }) => Promise<CodexUsageScanState>
+  getSnapshot: (args: {
+    scope: CodexUsageScope
+    range: CodexUsageRange
+    limit?: number
+  }) => Promise<CodexUsageSnapshot>
+  getSummary: (args: {
+    scope: CodexUsageScope
+    range: CodexUsageRange
+  }) => Promise<CodexUsageSummary>
+  getDaily: (args: {
+    scope: CodexUsageScope
+    range: CodexUsageRange
+  }) => Promise<CodexUsageDailyPoint[]>
+  getBreakdown: (args: {
+    scope: CodexUsageScope
+    range: CodexUsageRange
+    kind: CodexUsageBreakdownKind
+  }) => Promise<CodexUsageBreakdownRow[]>
+  getRecentSessions: (args: {
+    scope: CodexUsageScope
+    range: CodexUsageRange
+    limit?: number
+  }) => Promise<CodexUsageSessionRow[]>
+}
+
+export type OpenCodeUsageApi = {
+  getScanState: () => Promise<OpenCodeUsageScanState>
+  setEnabled: (args: { enabled: boolean }) => Promise<OpenCodeUsageScanState>
+  refresh: (args?: { force?: boolean }) => Promise<OpenCodeUsageScanState>
+  getSnapshot: (args: {
+    scope: OpenCodeUsageScope
+    range: OpenCodeUsageRange
+    limit?: number
+  }) => Promise<OpenCodeUsageSnapshot>
+  getSummary: (args: {
+    scope: OpenCodeUsageScope
+    range: OpenCodeUsageRange
+  }) => Promise<OpenCodeUsageSummary>
+  getDaily: (args: {
+    scope: OpenCodeUsageScope
+    range: OpenCodeUsageRange
+  }) => Promise<OpenCodeUsageDailyPoint[]>
+  getBreakdown: (args: {
+    scope: OpenCodeUsageScope
+    range: OpenCodeUsageRange
+    kind: OpenCodeUsageBreakdownKind
+  }) => Promise<OpenCodeUsageBreakdownRow[]>
+  getRecentSessions: (args: {
+    scope: OpenCodeUsageScope
+    range: OpenCodeUsageRange
+    limit?: number
+  }) => Promise<OpenCodeUsageSessionRow[]>
+}
+
+export type AppApi = {
+  /** Returns the app identity currently exposed to native chrome and the titlebar. */
+  getIdentity: () => Promise<AppIdentity>
+  /** Returns a URL base for feature-wall assets. In dev this is Vite /@fs;
+   *  in packaged builds this is file:// resources. Renderer appends filenames. */
+  getFeatureWallAssetBaseUrl: () => Promise<string>
+  /** Relaunches the app via Electron's app.relaunch() + app.exit(0). Used
+   *  by settings panes that need a full restart to apply changes (e.g. the
+   *  terminal-window blur setting in TerminalWindowSection). */
+  relaunch: () => Promise<void>
+  /** Restarts Orca through the normal quit pipeline so daemon-backed terminal
+   *  sessions survive and can reattach after the new process starts. */
+  restart: () => Promise<void>
+  /** Reloads the current app renderer through main so expected renderer
+   *  teardown can be classified before Electron emits process-gone events. */
+  reload: () => Promise<void>
+  /** Returns the macOS `AppleCurrentKeyboardLayoutInputSourceID` when
+   *  available (e.g. `com.apple.keylayout.PolishPro`). Used by the
+   *  keyboard-layout probe to distinguish layouts whose base layer matches
+   *  US QWERTY but whose Option layer composes characters (issue #1205).
+   *  Returns null on non-Darwin platforms or when the defaults read fails. */
+  getKeyboardInputSourceId: () => Promise<string | null>
+  /** Updates the macOS Dock unread badge. No-op on Windows/Linux. */
+  setUnreadDockBadgeCount: (count: number) => Promise<void>
+  /** Resolves the launch directory for global Floating Terminal tabs. */
+  getFloatingTerminalCwd: (args?: FloatingTerminalCwdRequest) => Promise<string>
+  /** Resolves Orca's app-owned directory for auto-created Floating Workspace
+   *  markdown notes. */
+  getFloatingMarkdownDirectory: () => Promise<string>
+  /** Opens a native picker for markdown documents, rooted in the floating
+   *  workspace, and authorizes the selected file for editor reads/writes. */
+  pickFloatingMarkdownDocument: () => Promise<MarkdownDocument | null>
+  /** Opens a native directory picker and authorizes the selected directory
+   *  for Floating Workspace markdown file creation. */
+  pickFloatingWorkspaceDirectory: () => Promise<string | null>
+}
+
+export type PreloadApi = {
+  app: AppApi
+  e2e: {
+    getConfig: () => E2EConfig
+  }
+  repos: {
+    list: () => Promise<Repo[]>
+    // Why: error union matches the IPC handler's return shape; renderer callers branch on `'error' in result`.
+    add: (args: {
+      path: string
+      kind?: 'git' | 'folder'
+    }) => Promise<{ repo: Repo } | { error: string }>
+    remove: (args: { repoId: string }) => Promise<void>
+    reorder: (args: { orderedIds: string[] }) => Promise<{ status: 'applied' | 'rejected' }>
+    update: (args: {
+      repoId: string
+      updates: Partial<
+        Pick<
+          Repo,
+          | 'displayName'
+          | 'badgeColor'
+          | 'repoIcon'
+          | 'upstream'
+          | 'hookSettings'
+          | 'worktreeBaseRef'
+          | 'worktreeBasePath'
+          | 'kind'
+          | 'issueSourcePreference'
+          | 'externalWorktreeVisibility'
+          | 'externalWorktreeVisibilityPromptDismissedAt'
+          | 'projectGroupId'
+          | 'projectGroupOrder'
+          | 'sourceControlAi'
+        >
+      >
+    }) => Promise<Repo>
+    pickFolder: () => Promise<string | null>
+    pickDirectory: () => Promise<string | null>
+    clone: (args: { url: string; destination: string }) => Promise<Repo>
+    cloneAbort: () => Promise<void>
+    // Why: error union matches the IPC handler's return shape; renderer callers branch on `'error' in result`.
+    addRemote: (args: {
+      connectionId: string
+      remotePath: string
+      displayName?: string
+      kind?: 'git' | 'folder'
+    }) => Promise<{ repo: Repo } | { error: string }>
+    // Why: error union matches the IPC handler's return shape; renderer callers branch on `'error' in result`.
+    create: (args: {
+      parentPath: string
+      name: string
+      kind: 'git' | 'folder'
+    }) => Promise<{ repo: Repo } | { error: string }>
+    onCloneProgress: (callback: (data: { phase: string; percent: number }) => void) => () => void
+    getGitUsername: (args: { repoId: string }) => Promise<string>
+    getBaseRefDefault: (args: { repoId: string }) => Promise<BaseRefDefaultResult>
+    searchBaseRefs: (args: { repoId: string; query: string; limit?: number }) => Promise<string[]>
+    searchBaseRefDetails: (args: {
+      repoId: string
+      query: string
+      limit?: number
+    }) => Promise<BaseRefSearchResult[]>
+    onChanged: (callback: () => void) => () => void
+  }
+  projectGroups: {
+    list: () => Promise<ProjectGroup[]>
+    create: (args: {
+      name: string
+      parentPath?: string | null
+      parentGroupId?: string | null
+      createdFrom?: ProjectGroup['createdFrom']
+    }) => Promise<ProjectGroup>
+    update: (args: {
+      groupId: string
+      updates: Partial<Pick<ProjectGroup, 'name' | 'isCollapsed' | 'tabOrder' | 'color'>>
+    }) => Promise<ProjectGroup | null>
+    delete: (args: { groupId: string }) => Promise<boolean>
+    moveProject: (args: {
+      projectId: string
+      groupId: string | null
+      order?: number
+    }) => Promise<Repo | null>
+    scanNested: (args: {
+      path: string
+      connectionId?: string
+      scanId?: string
+      options?: Record<string, unknown>
+    }) => Promise<NestedRepoScanResult>
+    cancelNestedScan: (args: { scanId: string }) => Promise<boolean>
+    onNestedScanProgress: (
+      callback: (data: { scanId: string; scan: NestedRepoScanResult }) => void
+    ) => () => void
+    importNested: (args: {
+      parentPath: string
+      groupName: string
+      projectPaths: string[]
+      connectionId?: string
+      scanId?: string
+      mode: ProjectGroupImportMode
+    }) => Promise<ProjectGroupImportResult>
+  }
+  sparsePresets: {
+    list: (args: { repoId: string }) => Promise<SparsePreset[]>
+    save: (args: {
+      repoId: string
+      id?: string
+      name: string
+      directories: string[]
+    }) => Promise<SparsePreset>
+    remove: (args: { repoId: string; presetId: string }) => Promise<void>
+    onChanged: (callback: (data: { repoId: string }) => void) => () => void
+  }
+  worktrees: {
+    list: (args: { repoId: string }) => Promise<Worktree[]>
+    listDetected: (args: { repoId: string }) => Promise<DetectedWorktreeListResult>
+    listAll: () => Promise<Worktree[]>
+    create: (args: CreateWorktreeArgs) => Promise<CreateWorktreeResult>
+    prefetchCreateBase: (args: { repoId: string; baseBranch?: string }) => Promise<void>
+    resolvePrBase: (args: {
+      repoId: string
+      prNumber: number
+      headRefName?: string
+      isCrossRepository?: boolean
+    }) => Promise<GitHubPrStartPoint | { error: string }>
+    /** GitLab parallel of resolvePrBase. For same-project MRs returns
+     *  `<remote>/<source_branch>`; for fork MRs fetches
+     *  refs/merge-requests/<iid>/head and returns the SHA. */
+    resolveMrBase: (args: {
+      repoId: string
+      mrIid: number
+      sourceBranch?: string
+      isCrossRepository?: boolean
+    }) => Promise<{ baseBranch: string; pushTarget?: GitPushTarget } | { error: string }>
+    remove: (args: {
+      worktreeId: string
+      force?: boolean
+      skipArchive?: boolean
+    }) => Promise<RemoveWorktreeResult>
+    forceDeletePreservedBranch: (args: {
+      worktreeId: string
+      branchName: string
+      expectedHead: string
+    }) => Promise<ForceDeleteWorktreeBranchResult>
+    updateMeta: (args: { worktreeId: string; updates: Partial<WorktreeMeta> }) => Promise<Worktree>
+    listLineage: () => Promise<Record<string, WorktreeLineage>>
+    updateLineage: (args: {
+      worktreeId: string
+      parentWorktreeId?: string
+      noParent?: boolean
+    }) => Promise<WorktreeLineage | null>
+    persistSortOrder: (args: { orderedIds: string[] }) => Promise<void>
+    onChanged: (callback: (data: { repoId: string }) => void) => () => void
+    onBaseStatus: (callback: (data: WorktreeBaseStatusEvent) => void) => () => void
+    onRemoteBranchConflict: (
+      callback: (data: WorktreeRemoteBranchConflictEvent) => void
+    ) => () => void
+  }
+  workspaceCleanup: {
+    scan: (args?: WorkspaceCleanupScanArgs) => Promise<WorkspaceCleanupScanResult>
+    dismiss: (args: WorkspaceCleanupDismissArgs) => Promise<void>
+    clearDismissals: () => Promise<void>
+    hasKillableLocalProcesses: (
+      args: WorkspaceCleanupLocalProcessArgs
+    ) => Promise<WorkspaceCleanupLocalProcessResult>
+  }
+  workspaceSpace: {
+    analyze: () => Promise<WorkspaceSpaceAnalyzeResult>
+    cancel: () => Promise<boolean>
+    onProgress: (callback: (progress: WorkspaceSpaceScanProgress) => void) => () => void
+  }
+  workspacePorts: {
+    scan: (args: WorkspacePortScanRequest) => Promise<WorkspacePortScanResult>
+    kill: (args: WorkspacePortKillRequest) => Promise<WorkspacePortKillResult>
+    onAdvertisedUrlChanged: (
+      callback: (event: WorkspacePortAdvertisedUrlChangedEvent) => void
+    ) => () => void
+  }
+  pty: {
+    spawn: (opts: {
+      cols: number
+      rows: number
+      cwd?: string
+      env?: Record<string, string>
+      command?: string
+      connectionId?: string | null
+      worktreeId?: string
+      sessionId?: string
+      // Why: lets a single tab open in a different shell than the user's default.
+      // Preserved from the deleted index.d.ts PtyApi duplicate during the
+      // single-source-of-truth collapse (see docs/preload-typecheck-hole.md §1).
+      shellOverride?: string
+      // Why: closes the SIGKILL race documented in INVESTIGATION.md — main
+      // sync-flushes the (worktreeId, tabId, leafId → ptyId) binding before
+      // pty:spawn returns. Only the renderer's daemon-host path threads these.
+      tabId?: string
+      leafId?: string
+      // Why: telemetry-plan.md§Agent launch semantics — main emits
+      // `agent_started` only after the PTY/session is created successfully,
+      // so the renderer threads the launch metadata through this field and
+      // the IPC handler fires the event from the spawn-success branch.
+      telemetry?: { agent_kind: AgentKind; launch_source: LaunchSource; request_kind: RequestKind }
+    }) => Promise<{
+      id: string
+      snapshot?: string
+      snapshotCols?: number
+      snapshotRows?: number
+      isReattach?: boolean
+      isAlternateScreen?: boolean
+      replay?: string
+      sessionExpired?: boolean
+      coldRestore?: { scrollback: string; cwd: string }
+    }>
+    write: (id: string, data: string) => void
+    writeAccepted: (id: string, data: string) => Promise<boolean>
+    resize: (id: string, cols: number, rows: number) => void
+    reportGeometry: (id: string, cols: number, rows: number) => void
+    signal: (id: string, signal: string) => void
+    kill: (id: string, opts?: { keepHistory?: boolean }) => Promise<void>
+    ackColdRestore: (id: string) => void
+    hasChildProcesses: (id: string) => Promise<boolean>
+    getForegroundProcess: (id: string) => Promise<string | null>
+    getCwd: (id: string) => Promise<string>
+    listSessions: () => Promise<{ id: string; cwd: string; title: string }[]>
+    getMainBufferSnapshot: (
+      id: string,
+      opts?: { scrollbackRows?: number }
+    ) => Promise<{ data: string; cols: number; rows: number; seq?: number } | null>
+    onData: (
+      callback: (data: { id: string; data: string; seq?: number; rawLength?: number }) => void
+    ) => () => void
+    onReplay: (callback: (data: { id: string; data: string }) => void) => () => void
+    onExit: (callback: (data: { id: string; code: number }) => void) => () => void
+    onSerializeBufferRequest: (
+      callback: (data: {
+        requestId: string
+        ptyId: string
+        opts?: { scrollbackRows?: number; altScreenForcesZeroRows?: boolean }
+      }) => void
+    ) => () => void
+    onClearBufferRequest: (callback: (data: { ptyId: string }) => void) => () => void
+    sendSerializedBuffer: (
+      requestId: string,
+      snapshot: { data: string; cols: number; rows: number; lastTitle?: string } | null
+    ) => void
+    declarePendingPaneSerializer: (paneKey: string) => Promise<number>
+    settlePaneSerializer: (paneKey: string, gen: number) => Promise<void>
+    clearPendingPaneSerializer: (paneKey: string, gen: number) => Promise<void>
+    management: PtyManagementApi
+  }
+  feedback: {
+    submit: (args: {
+      feedback: string
+      submitAnonymously?: boolean
+      githubLogin: string | null
+      githubEmail: string | null
+    }) => Promise<{ ok: true } | { ok: false; status: number | null; error: string }>
+  }
+  crashReports: {
+    getLatestPending: () => Promise<CrashReportRecord | null>
+    getLatestReport: () => Promise<CrashReportRecord | null>
+    dismiss: (args: { reportId: string }) => Promise<CrashReportRecord | null>
+    recordRendererError: (
+      args: ReactErrorBoundaryReportArgs
+    ) => Promise<ReactErrorBoundaryReportResult>
+    recordBreadcrumb: (args: { name: string; data?: CrashReportBreadcrumbData }) => void
+    submit: (args: CrashReportSubmitArgs) => Promise<CrashReportSubmitResult>
+    copyLatestDiagnostics: (args?: {
+      reportId?: string
+      notes?: string
+    }) => Promise<{ ok: true } | { ok: false; error: string }>
+  }
+  export: ExportApi
+  gh: {
+    viewer: () => Promise<GitHubViewer | null>
+    repoSlug: (args: {
+      repoPath: string
+      repoId?: string
+    }) => Promise<{ owner: string; repo: string } | null>
+    repoUpstream: (args: {
+      repoPath: string
+      repoId?: string
+    }) => Promise<{ owner: string; repo: string } | null>
+    prForBranch: (args: {
+      repoPath: string
+      repoId?: string
+      branch: string
+      linkedPRNumber?: number | null
+      fallbackPRNumber?: number | null
+    }) => Promise<PRInfo | null>
+    refreshPRNow: (args: { candidate: GitHubPRRefreshCandidate }) => Promise<PRRefreshOutcome>
+    enqueuePRRefresh: (args: {
+      candidate: GitHubPRRefreshCandidate
+      reason: GitHubPRRefreshReason
+      priority?: number
+    }) => Promise<boolean>
+    reportVisiblePRRefreshCandidates: (args: {
+      candidates: GitHubPRRefreshCandidate[]
+      generation: number
+    }) => Promise<boolean>
+    onPRRefreshEvent: (callback: (event: GitHubPRRefreshEvent) => void) => () => void
+    issue: (args: {
+      repoPath: string
+      repoId?: string
+      number: number
+    }) => Promise<IssueInfo | null>
+    workItem: (args: {
+      repoPath: string
+      repoId?: string
+      number: number
+      type?: 'issue' | 'pr'
+    }) => Promise<Omit<GitHubWorkItem, 'repoId'> | null>
+    workItemByOwnerRepo: (args: {
+      repoPath: string
+      repoId?: string
+      owner: string
+      repo: string
+      number: number
+      type: 'issue' | 'pr'
+    }) => Promise<Omit<GitHubWorkItem, 'repoId'> | null>
+    workItemDetails: (args: {
+      repoPath: string
+      repoId?: string
+      number: number
+      type?: 'issue' | 'pr'
+    }) => Promise<GitHubWorkItemDetails | null>
+    prFileContents: (args: {
+      repoPath: string
+      repoId?: string
+      prNumber: number
+      path: string
+      oldPath?: string
+      status: GitHubPRFile['status']
+      headSha: string
+      baseSha: string
+    }) => Promise<GitHubPRFileContents>
+    listIssues: (args: {
+      repoPath: string
+      repoId?: string
+      limit?: number
+    }) => Promise<IssueInfo[]>
+    createIssue: (args: {
+      repoPath: string
+      repoId?: string
+      title: string
+      body: string
+      labels?: string[]
+      assignees?: string[]
+    }) => Promise<{ ok: true; number: number; url: string } | { ok: false; error: string }>
+    countWorkItems: (args: { repoPath: string; repoId?: string; query?: string }) => Promise<number>
+    listWorkItems: (args: {
+      repoPath: string
+      repoId?: string
+      limit?: number
+      query?: string
+      before?: string
+      noCache?: boolean
+    }) => Promise<ListWorkItemsResult<Omit<GitHubWorkItem, 'repoId'>>>
+    prChecks: (args: {
+      repoPath: string
+      repoId?: string
+      prNumber: number
+      headSha?: string
+      prRepo?: GitHubOwnerRepo | null
+      noCache?: boolean
+    }) => Promise<PRCheckDetail[]>
+    prCheckDetails: (args: {
+      repoPath: string
+      repoId?: string
+      checkRunId?: number
+      workflowRunId?: number
+      checkName?: string
+      url?: string | null
+      prRepo?: GitHubOwnerRepo | null
+    }) => Promise<PRCheckRunDetails | null>
+    rerunPRChecks: (args: {
+      repoPath: string
+      repoId?: string
+      prNumber: number
+      headSha?: string
+      failedOnly?: boolean
+    }) => Promise<{ ok: true; count: number } | { ok: false; error: string }>
+    prComments: (args: {
+      repoPath: string
+      repoId?: string
+      prNumber: number
+      prRepo?: GitHubOwnerRepo | null
+      noCache?: boolean
+    }) => Promise<PRComment[]>
+    resolveReviewThread: (args: {
+      repoPath: string
+      repoId?: string
+      threadId: string
+      resolve: boolean
+    }) => Promise<boolean>
+    setPRFileViewed: (args: {
+      repoPath: string
+      repoId?: string
+      prNumber: number
+      pullRequestId: string
+      path: string
+      viewed: boolean
+    }) => Promise<boolean>
+    updatePRTitle: (args: {
+      repoPath: string
+      repoId?: string
+      prNumber: number
+      title: string
+      prRepo?: GitHubOwnerRepo | null
+    }) => Promise<boolean>
+    mergePR: (args: {
+      repoPath: string
+      repoId?: string
+      prNumber: number
+      method?: 'merge' | 'squash' | 'rebase'
+      prRepo?: GitHubOwnerRepo | null
+    }) => Promise<{ ok: true } | { ok: false; error: string }>
+    setPRAutoMerge: (args: {
+      repoPath: string
+      repoId?: string
+      prNumber: number
+      enabled: boolean
+      prRepo?: GitHubOwnerRepo | null
+    }) => Promise<{ ok: true } | { ok: false; error: string }>
+    updatePRState: (args: {
+      repoPath: string
+      repoId?: string
+      prNumber: number
+      updates: { state: 'open' | 'closed' }
+    }) => Promise<{ ok: true } | { ok: false; error: string }>
+    requestPRReviewers: (args: {
+      repoPath: string
+      repoId?: string
+      prNumber: number
+      reviewers: string[]
+    }) => Promise<{ ok: true } | { ok: false; error: string }>
+    removePRReviewers: (args: {
+      repoPath: string
+      repoId?: string
+      prNumber: number
+      reviewers: string[]
+    }) => Promise<{ ok: true } | { ok: false; error: string }>
+    updateIssue: (args: {
+      repoPath: string
+      repoId?: string
+      number: number
+      updates: GitHubIssueUpdate
+    }) => Promise<{ ok: true } | { ok: false; error: string }>
+    addIssueComment: (args: {
+      repoPath: string
+      repoId?: string
+      number: number
+      body: string
+      /** Why: GitHub stores PR conversation comments under `/issues/N/comments`
+       *  too, so the IPC and `gh` call paths are identical. The renderer cache
+       *  key is keyed by the drawer's `type`, so callers pass it through to
+       *  scope the cross-window invalidation broadcast correctly and avoid
+       *  evicting an unrelated PR/issue that happens to share the number. */
+      type?: 'issue' | 'pr'
+      prRepo?: GitHubOwnerRepo | null
+    }) => Promise<GitHubCommentResult>
+    addPRReviewCommentReply: (args: {
+      repoPath: string
+      repoId?: string
+      prNumber: number
+      commentId: number
+      body: string
+      threadId?: string
+      path?: string
+      line?: number
+      prRepo?: GitHubOwnerRepo | null
+    }) => Promise<GitHubCommentResult>
+    addPRReviewComment: (
+      args: GitHubPRReviewCommentInput & { repoId?: string }
+    ) => Promise<GitHubCommentResult>
+    listLabels: (args: { repoPath: string; repoId?: string }) => Promise<string[]>
+    listAssignableUsers: (args: {
+      repoPath: string
+      repoId?: string
+    }) => Promise<GitHubAssignableUser[]>
+    /**
+     * Subscribe to local-mutation broadcasts. Used by the work-item-drawer
+     * cache to invalidate entries across windows after a successful mutation.
+     * Returns an unsubscribe function.
+     */
+    onWorkItemMutated: (
+      callback: (payload: {
+        repoPath: string
+        repoId?: string
+        type: 'issue' | 'pr'
+        number: number
+      }) => void
+    ) => () => void
+    checkOrcaStarred: () => Promise<boolean | null>
+    starOrca: (source: AppStarSource) => Promise<boolean>
+    /**
+     * GitHub API rate-limit snapshot. Does NOT consume quota (the
+     * `rate_limit` endpoint is exempt). Cached 30s server-side — pass
+     * `force: true` to bust after a known-expensive op.
+     */
+    rateLimit: (args?: { force?: boolean }) => Promise<GetRateLimitResult>
+    /**
+     * Probe `gh auth status` and the Electron process env to explain
+     * why ProjectV2 calls are failing with scope_missing. Surfaces the
+     * common gotcha where `GITHUB_TOKEN` is exported in the user's
+     * shell and silently shadows the keyring credential — in that case
+     * `gh auth refresh` is a no-op and the UI must say so.
+     */
+    diagnoseAuth: () => Promise<GhAuthDiagnostic>
+    // ── ProjectV2 (GitHub Projects) ─────────────────────────────────
+    listAccessibleProjects: () => Promise<ListAccessibleProjectsResult>
+    resolveProjectRef: (args: ResolveProjectRefArgs) => Promise<ResolveProjectRefResult>
+    listProjectViews: (args: ListProjectViewsArgs) => Promise<ListProjectViewsResult>
+    getProjectViewTable: (args: GetProjectViewTableArgs) => Promise<GetProjectViewTableResult>
+    projectWorkItemDetailsBySlug: (
+      args: ProjectWorkItemDetailsBySlugArgs
+    ) => Promise<ProjectWorkItemDetailsBySlugResult>
+    updateProjectItemField: (
+      args: UpdateProjectItemFieldArgs
+    ) => Promise<GitHubProjectMutationResult>
+    clearProjectItemField: (args: ClearProjectItemFieldArgs) => Promise<GitHubProjectMutationResult>
+    updateIssueBySlug: (args: UpdateIssueBySlugArgs) => Promise<GitHubProjectMutationResult>
+    updatePullRequestBySlug: (
+      args: UpdatePullRequestBySlugArgs
+    ) => Promise<GitHubProjectMutationResult>
+    addIssueCommentBySlug: (
+      args: AddIssueCommentBySlugArgs
+    ) => Promise<GitHubProjectCommentMutationResult>
+    updateIssueCommentBySlug: (
+      args: UpdateIssueCommentBySlugArgs
+    ) => Promise<GitHubProjectMutationResult>
+    deleteIssueCommentBySlug: (
+      args: DeleteIssueCommentBySlugArgs
+    ) => Promise<GitHubProjectMutationResult>
+    listLabelsBySlug: (args: ListLabelsBySlugArgs) => Promise<ListLabelsBySlugResult>
+    listAssignableUsersBySlug: (
+      args: ListAssignableUsersBySlugArgs
+    ) => Promise<ListAssignableUsersBySlugResult>
+    listIssueTypesBySlug: (args: ListIssueTypesBySlugArgs) => Promise<ListIssueTypesBySlugResult>
+    updateIssueTypeBySlug: (args: UpdateIssueTypeBySlugArgs) => Promise<GitHubProjectMutationResult>
+  }
+  hostedReview: {
+    forBranch: (args: HostedReviewForBranchArgs) => Promise<HostedReviewInfo | null>
+    getCreationEligibility: (
+      args: HostedReviewCreationEligibilityArgs
+    ) => Promise<HostedReviewCreationEligibility>
+    create: (args: CreateHostedReviewArgs) => Promise<CreateHostedReviewResult>
+  }
+  // ── GitLab — parallel to gh, MR/issue surface only in v1 ────────
+  // Shapes mirror gh.* one-to-one where the data matches; diverge
+  // where GitLab's API differs (MR state values, project path with
+  // host, paginated envelope from `glab api -i`).
+  gl: {
+    viewer: () => Promise<GitLabViewer | null>
+    diagnoseAuth: () => Promise<GitLabAuthDiagnostic>
+    rateLimit: (args?: {
+      force?: boolean
+      host?: string | null
+    }) => Promise<GetGitLabRateLimitResult>
+    projectSlug: (args: { repoPath: string }) => Promise<GitLabProjectRef | null>
+    mrForBranch: (args: {
+      repoPath: string
+      branch: string
+      linkedMRIid?: number | null
+    }) => Promise<MRInfo | null>
+    mr: (args: { repoPath: string; iid: number }) => Promise<MRInfo | null>
+    listMRs: (args: {
+      repoPath: string
+      state?: MRListState
+      page?: number
+      perPage?: number
+    }) => Promise<ListMergeRequestsResult>
+    /** Combined MR + issue list filtered by state. Issues are skipped
+     *  when state is 'merged' (issues don't merge). */
+    listWorkItems: (args: {
+      repoPath: string
+      state?: MRListState
+      page?: number
+      perPage?: number
+    }) => Promise<ListMergeRequestsResult>
+    issue: (args: { repoPath: string; number: number }) => Promise<GitLabIssueInfo | null>
+    listIssues: (args: {
+      repoPath: string
+      state?: 'opened' | 'closed' | 'all'
+      assignee?: string
+      limit?: number
+    }) => Promise<{ items: GitLabWorkItem[]; error?: ClassifiedError }>
+    createIssue: (args: {
+      repoPath: string
+      title: string
+      body: string
+    }) => Promise<{ ok: true; number: number; url: string } | { ok: false; error: string }>
+    updateIssue: (args: {
+      repoPath: string
+      number: number
+      updates: GitLabIssueUpdate
+    }) => Promise<{ ok: true } | { ok: false; error: string }>
+    addIssueComment: (args: {
+      repoPath: string
+      number: number
+      body: string
+    }) => Promise<GitLabCommentResult>
+    listLabels: (args: { repoPath: string }) => Promise<string[]>
+    listAssignableUsers: (args: { repoPath: string }) => Promise<GitLabAssignableUser[]>
+    /** Cross-project user-scoped todos (gitlab.com/dashboard/todos). */
+    todos: (args: { repoPath: string }) => Promise<GitLabTodo[]>
+    /** Aggregated dialog payload — body + discussions + pipeline jobs. */
+    workItemDetails: (args: {
+      repoPath: string
+      iid: number
+      type: 'issue' | 'mr'
+    }) => Promise<GitLabWorkItemDetails | null>
+    closeMR: (args: {
+      repoPath: string
+      iid: number
+    }) => Promise<{ ok: true } | { ok: false; error: string }>
+    reopenMR: (args: {
+      repoPath: string
+      iid: number
+    }) => Promise<{ ok: true } | { ok: false; error: string }>
+    mergeMR: (args: {
+      repoPath: string
+      iid: number
+      method?: 'merge' | 'squash' | 'rebase'
+    }) => Promise<{ ok: true } | { ok: false; error: string }>
+    updateMR: (args: {
+      repoPath: string
+      iid: number
+      updates: GitLabMRUpdate
+    }) => Promise<{ ok: true } | { ok: false; error: string }>
+    updateMRReviewers: (args: {
+      repoPath: string
+      iid: number
+      reviewerIds: number[]
+      projectRef?: GitLabProjectRef | null
+    }) => Promise<GitLabMRReviewersUpdateResult>
+    addMRComment: (args: {
+      repoPath: string
+      iid: number
+      body: string
+    }) => Promise<GitLabCommentResult>
+    addMRInlineComment: (args: {
+      repoPath: string
+      iid: number
+      input: GitLabMRInlineCommentInput
+      projectRef?: GitLabProjectRef | null
+    }) => Promise<GitLabCommentResult>
+    resolveMRDiscussion: (args: {
+      repoPath: string
+      iid: number
+      discussionId: string
+      resolved: boolean
+    }) => Promise<GitLabDiscussionResolveResult>
+    jobTrace: (args: {
+      repoPath: string
+      jobId: number
+      projectRef?: GitLabProjectRef | null
+    }) => Promise<GitLabJobTraceResult>
+    retryJob: (args: {
+      repoPath: string
+      jobId: number
+      projectRef?: GitLabProjectRef | null
+    }) => Promise<GitLabRetryJobResult>
+    workItemByPath: (args: {
+      repoPath: string
+      host: string
+      path: string
+      iid: number
+      type: 'issue' | 'mr'
+    }) => Promise<Omit<GitLabWorkItem, 'repoId'> | null>
+  }
+  linear: {
+    connect: (args: {
+      apiKey: string
+    }) => Promise<{ ok: true; viewer: LinearViewer } | { ok: false; error: string }>
+    disconnect: (args?: { workspaceId?: string }) => Promise<void>
+    selectWorkspace: (args: {
+      workspaceId: LinearWorkspaceSelection
+    }) => Promise<LinearConnectionStatus>
+    status: () => Promise<LinearConnectionStatus>
+    testConnection: (args?: {
+      workspaceId?: string
+    }) => Promise<{ ok: true; viewer: LinearViewer } | { ok: false; error: string }>
+    searchIssues: (args: {
+      query: string
+      limit?: number
+      workspaceId?: LinearWorkspaceSelection
+    }) => Promise<LinearIssue[]>
+    listIssues: (args?: {
+      filter?: 'assigned' | 'created' | 'all' | 'completed'
+      limit?: number
+      workspaceId?: LinearWorkspaceSelection
+    }) => Promise<LinearCollectionResult<LinearIssue>>
+    createIssue: (args: {
+      teamId: string
+      title: string
+      description?: string
+      workspaceId?: string
+      parentIssueId?: string
+      projectId?: string | null
+      stateId?: string
+      priority?: number
+      assigneeId?: string | null
+      labelIds?: string[]
+    }) => Promise<
+      | { ok: true; id: string; identifier: string; title: string; url: string }
+      | { ok: false; error: string }
+    >
+    getIssue: (args: { id: string; workspaceId?: string }) => Promise<LinearIssue | null>
+    updateIssue: (args: {
+      id: string
+      updates: LinearIssueUpdate
+      workspaceId?: string
+    }) => Promise<{ ok: true } | { ok: false; error: string }>
+    addIssueComment: (args: {
+      issueId: string
+      body: string
+      workspaceId?: string
+    }) => Promise<{ ok: true; id: string } | { ok: false; error: string }>
+    issueComments: (args: { issueId: string; workspaceId?: string }) => Promise<LinearComment[]>
+    listTeams: (args?: { workspaceId?: LinearWorkspaceSelection }) => Promise<LinearTeam[]>
+    listProjects: (args?: {
+      query?: string
+      limit?: number
+      workspaceId?: LinearWorkspaceSelection
+      force?: boolean
+    }) => Promise<LinearCollectionResult<LinearProjectSummary>>
+    getProject: (args: {
+      id: string
+      workspaceId: string
+      force?: boolean
+    }) => Promise<LinearProjectDetail | null>
+    listProjectIssues: (args: {
+      projectId: string
+      limit?: number
+      workspaceId: string
+      force?: boolean
+    }) => Promise<LinearCollectionResult<LinearIssue>>
+    listCustomViews: (args: {
+      model: LinearCustomViewModel
+      limit?: number
+      workspaceId?: LinearWorkspaceSelection
+      force?: boolean
+    }) => Promise<LinearCollectionResult<LinearCustomViewSummary>>
+    getCustomView: (args: {
+      viewId: string
+      model: LinearCustomViewModel
+      workspaceId: string
+      force?: boolean
+    }) => Promise<LinearCustomViewSummary | null>
+    listCustomViewIssues: (args: {
+      viewId: string
+      limit?: number
+      workspaceId: string
+      force?: boolean
+    }) => Promise<LinearCollectionResult<LinearIssue>>
+    listCustomViewProjects: (args: {
+      viewId: string
+      limit?: number
+      workspaceId: string
+      force?: boolean
+    }) => Promise<LinearCollectionResult<LinearProjectSummary>>
+    teamStates: (args: { teamId: string; workspaceId?: string }) => Promise<LinearWorkflowState[]>
+    teamLabels: (args: { teamId: string; workspaceId?: string }) => Promise<LinearLabel[]>
+    teamMembers: (args: { teamId: string; workspaceId?: string }) => Promise<LinearMember[]>
+  }
+  jira: {
+    connect: (args: {
+      siteUrl: string
+      email: string
+      apiToken: string
+    }) => Promise<{ ok: true; viewer: JiraViewer } | { ok: false; error: string }>
+    disconnect: (args?: { siteId?: string }) => Promise<void>
+    selectSite: (args: { siteId: JiraSiteSelection }) => Promise<JiraConnectionStatus>
+    status: () => Promise<JiraConnectionStatus>
+    testConnection: (args?: {
+      siteId?: string
+    }) => Promise<{ ok: true; viewer: JiraViewer } | { ok: false; error: string }>
+    searchIssues: (args: {
+      jql: string
+      limit?: number
+      siteId?: JiraSiteSelection
+    }) => Promise<JiraIssue[]>
+    listIssues: (args?: {
+      filter?: JiraIssueFilter
+      limit?: number
+      siteId?: JiraSiteSelection
+    }) => Promise<JiraIssue[]>
+    getIssue: (args: { key: string; siteId?: string }) => Promise<JiraIssue | null>
+    createIssue: (
+      args: JiraCreateIssueArgs
+    ) => Promise<{ ok: true; id: string; key: string; url: string } | { ok: false; error: string }>
+    updateIssue: (args: {
+      key: string
+      updates: JiraIssueUpdate
+      siteId?: string
+    }) => Promise<{ ok: true } | { ok: false; error: string }>
+    addIssueComment: (args: {
+      key: string
+      body: string
+      siteId?: string
+    }) => Promise<{ ok: true; id: string } | { ok: false; error: string }>
+    issueComments: (args: { key: string; siteId?: string }) => Promise<JiraComment[]>
+    listProjects: (args?: { siteId?: JiraSiteSelection }) => Promise<JiraProject[]>
+    listIssueTypes: (args: { projectIdOrKey: string; siteId?: string }) => Promise<JiraIssueType[]>
+    listCreateFields: (args: {
+      projectIdOrKey: string
+      issueTypeId: string
+      siteId?: string
+    }) => Promise<JiraCreateField[]>
+    listPriorities: (args?: { siteId?: string }) => Promise<JiraPriority[]>
+    listAssignableUsers: (args: {
+      key: string
+      query?: string
+      siteId?: string
+    }) => Promise<JiraUser[]>
+    listTransitions: (args: { key: string; siteId?: string }) => Promise<JiraTransition[]>
+  }
+  starNag: {
+    onShow: (callback: () => void) => () => void
+    dismiss: () => Promise<void>
+    complete: () => Promise<void>
+    forceShow: () => Promise<void>
+  }
+  /** Fire-and-forget track. Loose typing at the IPC boundary on purpose —
+   *  the main-side validator is the single enforcement point. Renderer call
+   *  sites should import `track<N>()` from `src/renderer/src/lib/telemetry.ts`
+   *  for the `EventMap`-based type safety, not reach for this directly. */
+  telemetryTrack: (name: string, props: Record<string, unknown>) => Promise<void>
+  /** Flip the persisted opt-in preference. Subject to a per-session
+   *  consent-mutation rate limit on the main side (≤5/session). */
+  telemetrySetOptIn: (optedIn: boolean) => Promise<void>
+  /** Diagnostic-bundle / trace-folder controls. Surface for
+   *  telemetry-error-tracking.md §User controls. The renderer triggers
+   *  flows; main does the filesystem / network work and returns
+   *  serializable metadata. Main retains collected upload payloads so the
+   *  renderer can confirm without reading or substituting arbitrary bytes. */
+  diagnostics: {
+    getStatus: () => Promise<DiagnosticsStatusPayload>
+    openTraceFolder: () => Promise<void>
+    clearTraces: () => Promise<void>
+    collectBundle: (lookbackMinutes?: number) => Promise<DiagnosticsBundlePayload>
+    openBundlePreview: (bundleSubmissionId: string) => Promise<void>
+    discardBundlePreview: (bundleSubmissionId: string) => Promise<void>
+    uploadBundle: (bundleSubmissionId: string) => Promise<DiagnosticsUploadPayload>
+    deleteBundle: (ticketId: string) => Promise<void>
+  }
+  /** Read-only view of effective consent state, including the reason if
+   *  disabled (env var / user opt-out / CI / pending banner). Used by the
+   *  Privacy pane to render the correct "blocked by X" helper text — env
+   *  vars are main-side state the renderer cannot read directly. */
+  telemetryGetConsentState: () => Promise<TelemetryConsentState>
+  /** Banner ✕ — persist `optedIn = true` silently, emit nothing. Deliberately
+   *  a separate channel from `telemetrySetOptIn` because main's `via`
+   *  derivation on that channel would tag this path as `first_launch_banner`
+   *  and fire `telemetry_opted_in`, which the ✕-as-silent-acknowledge
+   *  semantics forbid (the user did not explicitly opt in, they declined to
+   *  intervene). Subject to the same per-session consent-mutation rate
+   *  limit as `telemetrySetOptIn`. */
+  telemetryAcknowledgeBanner: () => Promise<void>
+  settings: {
+    get: () => Promise<GlobalSettings>
+    set: (args: Partial<GlobalSettings>) => Promise<GlobalSettings>
+    listFonts: () => Promise<string[]>
+    previewGhosttyImport: () => Promise<GhosttyImportPreview>
+    /** Subscribe to out-of-band settings updates (e.g. the View > Appearance
+     *  menu toggles) so the renderer can stay in sync with main's persisted
+     *  state without round-tripping through settings:get. */
+    onChanged: (callback: (updates: Partial<GlobalSettings>) => void) => () => void
+  }
+  keybindings: {
+    get: () => Promise<KeybindingFileSnapshot>
+    ensureFile: () => Promise<KeybindingFileSnapshot>
+    setAction: (args: {
+      actionId: KeybindingActionId
+      bindings: string[] | null
+    }) => Promise<KeybindingFileSnapshot>
+    reload: () => Promise<KeybindingFileSnapshot>
+    openFile: () => Promise<KeybindingFileSnapshot>
+    revealFile: () => Promise<KeybindingFileSnapshot>
+    onChanged: (callback: (snapshot: KeybindingFileSnapshot) => void) => () => void
+  }
+  codexAccounts: {
+    list: () => Promise<CodexRateLimitAccountsState>
+    add: (args?: {
+      runtime?: 'host' | 'wsl'
+      wslDistro?: string | null
+    }) => Promise<CodexRateLimitAccountsState>
+    reauthenticate: (args: { accountId: string }) => Promise<CodexRateLimitAccountsState>
+    remove: (args: { accountId: string }) => Promise<CodexRateLimitAccountsState>
+    select: (args: {
+      accountId: string | null
+      runtime?: 'host' | 'wsl'
+      wslDistro?: string | null
+    }) => Promise<CodexRateLimitAccountsState>
+  }
+  claudeAccounts: {
+    list: () => Promise<ClaudeRateLimitAccountsState>
+    add: (args?: {
+      runtime?: 'host' | 'wsl'
+      wslDistro?: string | null
+    }) => Promise<ClaudeRateLimitAccountsState>
+    reauthenticate: (args: { accountId: string }) => Promise<ClaudeRateLimitAccountsState>
+    remove: (args: { accountId: string }) => Promise<ClaudeRateLimitAccountsState>
+    select: (args: {
+      accountId: string | null
+      runtime?: 'host' | 'wsl'
+      wslDistro?: string | null
+    }) => Promise<ClaudeRateLimitAccountsState>
+  }
+  cli: {
+    getInstallStatus: () => Promise<CliInstallStatus>
+    install: () => Promise<CliInstallStatus>
+    remove: () => Promise<CliInstallStatus>
+    getWslInstallStatus: () => Promise<CliInstallStatus>
+    installWsl: () => Promise<CliInstallStatus>
+    removeWsl: () => Promise<CliInstallStatus>
+  }
+  agentHooks: {
+    claudeStatus: () => Promise<AgentHookInstallStatus>
+    openClaudeStatus: () => Promise<AgentHookInstallStatus>
+    codexStatus: () => Promise<AgentHookInstallStatus>
+    geminiStatus: () => Promise<AgentHookInstallStatus>
+    antigravityStatus: () => Promise<AgentHookInstallStatus>
+    ampStatus: () => Promise<AgentHookInstallStatus>
+    cursorStatus: () => Promise<AgentHookInstallStatus>
+    droidStatus: () => Promise<AgentHookInstallStatus>
+    commandCodeStatus: () => Promise<AgentHookInstallStatus>
+    grokStatus: () => Promise<AgentHookInstallStatus>
+    copilotStatus: () => Promise<AgentHookInstallStatus>
+    hermesStatus: () => Promise<AgentHookInstallStatus>
+  }
+  agentTrust: {
+    markTrusted: (args: {
+      preset: 'cursor' | 'copilot' | 'codex'
+      workspacePath: string
+      connectionId?: string
+    }) => Promise<void>
+  }
+  preflight: PreflightApi
+  notifications: {
+    dispatch: (args: NotificationDispatchRequest) => Promise<NotificationDispatchResult>
+    dismiss: (ids: string[]) => Promise<NotificationDismissResult>
+    openSystemSettings: () => Promise<void>
+    getPermissionStatus: () => Promise<NotificationPermissionStatusResult>
+    requestPermission: () => Promise<NotificationPermissionStatusResult>
+    playSound: (options?: { force?: boolean; volume?: number }) => Promise<NotificationSoundResult>
+  }
+  onboarding: {
+    get: () => Promise<OnboardingState>
+    // Why: main-process `updateOnboarding` merges checklist field-by-field, so
+    // callers can pass a partial checklist (e.g. just `{ addedRepo: true }`)
+    // without re-supplying every flag.
+    update: (
+      updates: Partial<Omit<OnboardingState, 'checklist'>> & {
+        checklist?: Partial<OnboardingState['checklist']>
+      }
+    ) => Promise<OnboardingState>
+  }
+  developerPermissions: {
+    getStatus: () => Promise<DeveloperPermissionState[]>
+    request: (args: { id: DeveloperPermissionId }) => Promise<DeveloperPermissionRequestResult>
+    openSettings: (args: { id: DeveloperPermissionId }) => Promise<void>
+  }
+  computerUsePermissions: {
+    getStatus: () => Promise<ComputerUsePermissionStatusResult>
+    openSetup: (args?: {
+      id?: ComputerUsePermissionId
+    }) => Promise<ComputerUsePermissionSetupResult>
+    reset: () => Promise<ComputerUsePermissionResetResult>
+  }
+  shell: {
+    openPath: (path: string) => Promise<void>
+    openInFileManager: (path: string) => Promise<ShellOpenLocalPathResult>
+    openInExternalEditor: (path: string, command?: string) => Promise<ShellOpenLocalPathResult>
+    openUrl: (url: string) => Promise<void>
+    openFilePath: (path: string) => Promise<boolean>
+    openFileUri: (uri: string) => Promise<void>
+    pathExists: (path: string) => Promise<boolean>
+    pickAttachment: () => Promise<string | null>
+    pickImage: () => Promise<string | null>
+    pickRepoIconImage: () => Promise<{ dataUrl: string; fileName: string } | null>
+    pickAudio: () => Promise<string | null>
+    pickDirectory: (args: { defaultPath?: string }) => Promise<string | null>
+    copyFile: (args: { srcPath: string; destPath: string }) => Promise<void>
+  }
+  skills: {
+    discover: (target?: SkillDiscoveryTarget) => Promise<SkillDiscoveryResult>
+  }
+  pet: {
+    import: () => Promise<CustomPet | null>
+    importPetBundle: () => Promise<CustomPet | null>
+    read: (id: string, fileName: string, kind?: 'image' | 'bundle') => Promise<ArrayBuffer | null>
+    delete: (id: string, fileName: string, kind?: 'image' | 'bundle') => Promise<void>
+  }
+  browser: BrowserApi
+  hooks: {
+    check: (args: { repoId: string }) => Promise<{
+      status?: 'ok' | 'error'
+      hasHooks: boolean
+      hooks: OrcaHooks | null
+      mayNeedUpdate: boolean
+    }>
+    inspectSetupScriptImports: (args: { repoId: string }) => Promise<SetupScriptImportCandidate[]>
+    createIssueCommandRunner: (args: {
+      repoId: string
+      worktreePath: string
+      command: string
+    }) => Promise<WorktreeSetupLaunch>
+    readIssueCommand: (args: { repoId: string }) => Promise<{
+      status?: 'ok' | 'error'
+      localContent: string | null
+      sharedContent: string | null
+      effectiveContent: string | null
+      localFilePath: string
+      source: 'local' | 'shared' | 'none'
+    }>
+    writeIssueCommand: (args: { repoId: string; content: string }) => Promise<void>
+  }
+  cache: {
+    getGitHub: () => Promise<{
+      pr: Record<string, { data: PRInfo | null; fetchedAt: number }>
+      issue: Record<string, { data: IssueInfo | null; fetchedAt: number }>
+    }>
+    setGitHub: (args: {
+      cache: {
+        pr: Record<string, { data: PRInfo | null; fetchedAt: number }>
+        issue: Record<string, { data: IssueInfo | null; fetchedAt: number }>
+      }
+    }) => Promise<void>
+  }
+  session: {
+    get: () => Promise<WorkspaceSessionState>
+    set: (args: WorkspaceSessionState) => Promise<void>
+    patch: (args: WorkspaceSessionPatch) => Promise<void>
+    setSync: (args: WorkspaceSessionState) => void
+  }
+  remoteWorkspace: {
+    get: (args: { targetId: string }) => Promise<RemoteWorkspaceSnapshot | null>
+    setForConnectedTargets: (args: {
+      session?: WorkspaceSessionState
+      hydratedTargetIds?: string[]
+    }) => Promise<{ targetId: string; result: RemoteWorkspacePatchResult }[]>
+    listEnabledConnectedTargets: () => Promise<string[]>
+    listConnectedClients: (args?: {
+      targetIds?: string[]
+    }) => Promise<{ targetId: string; clients: RemoteWorkspaceConnectedClient[] }[]>
+    clientId: () => Promise<string>
+    onChanged: (callback: (event: RemoteWorkspaceChangedEvent) => void) => () => void
+  }
+  updater: {
+    getVersion: () => Promise<string>
+    getStatus: () => Promise<UpdateStatus>
+    check: (options?: { includePrerelease?: boolean }) => Promise<void>
+    download: () => Promise<void>
+    quitAndInstall: () => Promise<void>
+    dismissNudge: () => Promise<void>
+    onStatus: (callback: (status: UpdateStatus) => void) => () => void
+    onClearDismissal: (callback: () => void) => () => void
+  }
+  notebook: {
+    runPythonCell: (args: {
+      filePath: string
+      code: string
+      preamble?: string
+      connectionId?: string | null
+    }) => Promise<{ stdout: string; stderr: string; exitCode: number | null; error?: string }>
+  }
+  stats: StatsApi
+  memory: MemoryApi
+  claudeUsage: ClaudeUsageApi
+  codexUsage: CodexUsageApi
+  openCodeUsage: OpenCodeUsageApi
+  fs: {
+    readDir: (args: { dirPath: string; connectionId?: string }) => Promise<DirEntry[]>
+    readFile: (args: {
+      filePath: string
+      connectionId?: string
+    }) => Promise<{ content: string; isBinary: boolean; isImage?: boolean; mimeType?: string }>
+    listMarkdownDocuments: (args: {
+      rootPath: string
+      connectionId?: string
+    }) => Promise<MarkdownDocument[]>
+    writeFile: (args: { filePath: string; content: string; connectionId?: string }) => Promise<void>
+    createFile: (args: { filePath: string; connectionId?: string }) => Promise<void>
+    createDir: (args: { dirPath: string; connectionId?: string }) => Promise<void>
+    rename: (args: { oldPath: string; newPath: string; connectionId?: string }) => Promise<void>
+    copy: (args: {
+      sourcePath: string
+      destinationPath: string
+      connectionId?: string
+    }) => Promise<void>
+    deletePath: (args: {
+      targetPath: string
+      connectionId?: string
+      recursive?: boolean
+    }) => Promise<void>
+    authorizeExternalPath: (args: { targetPath: string }) => Promise<void>
+    stat: (args: {
+      filePath: string
+      connectionId?: string
+    }) => Promise<{ size: number; isDirectory: boolean; mtime: number }>
+    pathExists: (args: { filePath: string; connectionId?: string }) => Promise<boolean>
+    listFiles: (args: {
+      rootPath: string
+      connectionId?: string
+      excludePaths?: string[]
+    }) => Promise<string[]>
+    search: (args: SearchOptions & { connectionId?: string }) => Promise<SearchResult>
+    importExternalPaths: (args: {
+      sourcePaths: string[]
+      destDir: string
+      connectionId?: string
+      ensureDir?: boolean
+    }) => Promise<{
+      results: (
+        | {
+            sourcePath: string
+            status: 'imported'
+            destPath: string
+            kind: 'file' | 'directory'
+            renamed: boolean
+          }
+        | {
+            sourcePath: string
+            status: 'skipped'
+            reason: 'missing' | 'symlink' | 'permission-denied' | 'unsupported'
+          }
+        | {
+            sourcePath: string
+            status: 'failed'
+            reason: string
+          }
+      )[]
+    }>
+    stageExternalPathsForRuntimeUpload: (args: { sourcePaths: string[] }) => Promise<{
+      sources: (
+        | {
+            sourcePath: string
+            status: 'staged'
+            name: string
+            kind: 'file' | 'directory'
+            entries: (
+              | { relativePath: string; kind: 'directory' }
+              | { relativePath: string; kind: 'file'; contentBase64: string }
+            )[]
+          }
+        | {
+            sourcePath: string
+            status: 'skipped'
+            reason: 'missing' | 'symlink' | 'permission-denied' | 'unsupported'
+          }
+        | {
+            sourcePath: string
+            status: 'failed'
+            reason: string
+          }
+      )[]
+    }>
+    resolveDroppedPathsForAgent: (args: {
+      paths: string[]
+      worktreePath: string
+      connectionId?: string
+    }) => Promise<{
+      resolvedPaths: string[]
+      skipped: {
+        sourcePath: string
+        reason: 'missing' | 'symlink' | 'permission-denied' | 'unsupported'
+      }[]
+      failed: { sourcePath: string; reason: string }[]
+    }>
+    watchWorktree: (args: { worktreePath: string; connectionId?: string }) => Promise<void>
+    unwatchWorktree: (args: { worktreePath: string; connectionId?: string }) => Promise<void>
+    onFsChanged: (callback: (payload: FsChangedPayload) => void) => () => void
+  }
+  git: {
+    status: (args: {
+      worktreePath: string
+      connectionId?: string
+      includeIgnored?: boolean
+    }) => Promise<GitStatusResult>
+    checkIgnored: (args: {
+      worktreePath: string
+      paths: string[]
+      connectionId?: string
+    }) => Promise<string[]>
+    history: (
+      args: { worktreePath: string; connectionId?: string } & GitHistoryOptions
+    ) => Promise<GitHistoryResult>
+    conflictOperation: (args: {
+      worktreePath: string
+      connectionId?: string
+    }) => Promise<GitConflictOperation>
+    abortMerge: (args: { worktreePath: string; connectionId?: string }) => Promise<void>
+    abortRebase: (args: { worktreePath: string; connectionId?: string }) => Promise<void>
+    diff: (args: {
+      worktreePath: string
+      filePath: string
+      staged: boolean
+      compareAgainstHead?: boolean
+      connectionId?: string
+    }) => Promise<GitDiffResult>
+    branchCompare: (args: {
+      worktreePath: string
+      baseRef: string
+      connectionId?: string
+    }) => Promise<GitBranchCompareResult>
+    commitCompare: (args: {
+      worktreePath: string
+      commitId: string
+      connectionId?: string
+    }) => Promise<GitCommitCompareResult>
+    upstreamStatus: (args: {
+      worktreePath: string
+      connectionId?: string
+      pushTarget?: GitPushTarget
+    }) => Promise<GitUpstreamStatus>
+    fetch: (args: {
+      worktreePath: string
+      connectionId?: string
+      pushTarget?: GitPushTarget
+    }) => Promise<void>
+    push: (args: {
+      worktreePath: string
+      publish?: boolean
+      forceWithLease?: boolean
+      connectionId?: string
+      pushTarget?: GitPushTarget
+    }) => Promise<void>
+    pull: (args: {
+      worktreePath: string
+      connectionId?: string
+      pushTarget?: GitPushTarget
+    }) => Promise<void>
+    fastForward: (args: {
+      worktreePath: string
+      connectionId?: string
+      pushTarget?: GitPushTarget
+    }) => Promise<void>
+    rebaseFromBase: (args: {
+      worktreePath: string
+      baseRef: string
+      connectionId?: string
+    }) => Promise<void>
+    branchDiff: (args: {
+      worktreePath: string
+      compare: {
+        baseRef: string
+        baseOid: string
+        headOid: string
+        mergeBase: string
+      }
+      filePath: string
+      oldPath?: string
+      connectionId?: string
+    }) => Promise<GitDiffResult>
+    commitDiff: (args: {
+      worktreePath: string
+      commitOid: string
+      parentOid?: string | null
+      filePath: string
+      oldPath?: string
+      connectionId?: string
+    }) => Promise<GitDiffResult>
+    commit: (args: {
+      worktreePath: string
+      message: string
+      connectionId?: string
+    }) => Promise<{ success: boolean; error?: string }>
+    generateCommitMessage: (args: {
+      worktreePath: string
+      repoId?: string
+      connectionId?: string
+    }) => Promise<
+      | { success: true; message: string; agentLabel?: string }
+      | { success: false; error: string; canceled?: boolean }
+    >
+    discoverCommitMessageModels: (args: {
+      agentId: string
+      worktreePath?: string
+      connectionId?: string
+    }) => Promise<
+      | {
+          success: true
+          capability: CommitMessageAgentCapability
+          models: CommitMessageModelCapability[]
+          defaultModelId: string
+        }
+      | { success: false; error: string }
+    >
+    cancelGenerateCommitMessage: (args: {
+      worktreePath: string
+      connectionId?: string
+    }) => Promise<void>
+    generatePullRequestFields: (args: {
+      worktreePath: string
+      repoId?: string
+      base: string
+      title: string
+      body: string
+      draft: boolean
+      connectionId?: string
+    }) => Promise<
+      | {
+          success: true
+          fields: { base: string; title: string; body: string; draft: boolean }
+          agentLabel?: string
+        }
+      | { success: false; error: string; canceled?: boolean }
+    >
+    cancelGeneratePullRequestFields: (args: {
+      worktreePath: string
+      connectionId?: string
+    }) => Promise<void>
+    stage: (args: {
+      worktreePath: string
+      filePath: string
+      connectionId?: string
+    }) => Promise<void>
+    bulkStage: (args: {
+      worktreePath: string
+      filePaths: string[]
+      connectionId?: string
+    }) => Promise<void>
+    unstage: (args: {
+      worktreePath: string
+      filePath: string
+      connectionId?: string
+    }) => Promise<void>
+    bulkUnstage: (args: {
+      worktreePath: string
+      filePaths: string[]
+      connectionId?: string
+    }) => Promise<void>
+    discard: (args: {
+      worktreePath: string
+      filePath: string
+      connectionId?: string
+    }) => Promise<void>
+    bulkDiscard: (args: {
+      worktreePath: string
+      filePaths: string[]
+      connectionId?: string
+    }) => Promise<void>
+    remoteFileUrl: (args: {
+      worktreePath: string
+      relativePath: string
+      line: number
+      connectionId?: string
+    }) => Promise<string | null>
+  }
+  ui: {
+    get: () => Promise<PersistedUIState>
+    set: (args: Partial<PersistedUIState>) => Promise<void>
+    recordFeatureInteraction: (id: FeatureInteractionId) => Promise<PersistedUIState>
+    onOpenSettings: (callback: () => void) => () => void
+    onOpenSetupGuide: (callback: () => void) => () => void
+    onOpenFeatureTour: (callback: () => void) => () => void
+    onOpenCrashReport: (callback: () => void) => () => void
+    onToggleLeftSidebar: (callback: () => void) => () => void
+    onToggleRightSidebar: (callback: () => void) => () => void
+    onToggleWorktreePalette: (callback: () => void) => () => void
+    onToggleFloatingTerminal: (callback: () => void) => () => void
+    onTerminalShortcutCaptured: (
+      callback: (data: { actionId: KeybindingActionId }) => void
+    ) => () => void
+    onOpenQuickOpen: (callback: () => void) => () => void
+    onOpenNewWorkspace: (callback: () => void) => () => void
+    onDeleteCurrentWorkspace: (callback: () => void) => () => void
+    onOpenTasks: (callback: () => void) => () => void
+    onJumpToWorktreeIndex: (callback: (index: number) => void) => () => void
+    onJumpToTabIndex: (callback: (index: number) => void) => () => void
+    onWorktreeHistoryNavigate: (callback: (direction: 'back' | 'forward') => void) => () => void
+    onNewBrowserTab: (callback: () => void) => () => void
+    onNewMarkdownTab: (callback: () => void) => () => void
+    onRequestTabCreate: (
+      callback: (data: {
+        requestId: string
+        url: string
+        worktreeId?: string
+        sessionProfileId?: string
+      }) => void
+    ) => () => void
+    replyTabCreate: (reply: { requestId: string; browserPageId?: string; error?: string }) => void
+    onRequestTabSetProfile: (
+      callback: (data: { requestId: string; browserPageId: string; profileId: string }) => void
+    ) => () => void
+    replyTabSetProfile: (reply: { requestId: string; error?: string }) => void
+    onRequestTabClose: (
+      callback: (data: { requestId: string; tabId: string | null; worktreeId?: string }) => void
+    ) => () => void
+    replyTabClose: (reply: { requestId: string; error?: string }) => void
+    onNewTerminalTab: (callback: () => void) => () => void
+    onFocusBrowserAddressBar: (callback: () => void) => () => void
+    onFindInBrowserPage: (callback: () => void) => () => void
+    onReloadBrowserPage: (callback: () => void) => () => void
+    onHardReloadBrowserPage: (callback: () => void) => () => void
+    onCloseActiveTab: (callback: () => void) => () => void
+    onSwitchTab: (callback: (direction: 1 | -1) => void) => () => void
+    onSwitchTabAcrossAllTypes: (callback: (direction: 1 | -1) => void) => () => void
+    onSwitchRecentTab: (callback: () => void) => () => void
+    onSwitchTerminalTab: (callback: (direction: 1 | -1) => void) => () => void
+    onCtrlTabKeyDown: (callback: (data: { shiftKey: boolean }) => void) => () => void
+    onCtrlTabKeyUp: (callback: () => void) => () => void
+    onToggleStatusBar: (callback: () => void) => () => void
+    onDictationKeyDown: (callback: () => void) => () => void
+    onExportPdfRequested: (callback: () => void) => () => void
+    onActivateWorktree: (
+      callback: (data: {
+        repoId: string
+        worktreeId: string
+        setup?: WorktreeSetupLaunch
+        startup?: WorktreeStartupLaunch
+        defaultTabs?: WorktreeDefaultTabsLaunch
+      }) => void
+    ) => () => void
+    onCreateTerminal: (
+      callback: (data: {
+        requestId?: string
+        worktreeId: string
+        command?: string
+        title?: string
+        ptyId?: string
+        activate?: boolean
+        tabId?: string
+        leafId?: string
+        splitFromLeafId?: string
+        splitDirection?: 'horizontal' | 'vertical'
+        splitTelemetrySource?: TerminalPaneSplitSource
+      }) => void
+    ) => () => void
+    onRequestTerminalCreate: (
+      callback: (data: {
+        requestId: string
+        worktreeId?: string
+        afterTabId?: string
+        targetGroupId?: string
+        command?: string
+        title?: string
+        activate?: boolean
+      }) => void
+    ) => () => void
+    replyTerminalCreate: (reply: {
+      requestId: string
+      tabId?: string
+      title?: string
+      error?: string
+    }) => void
+    onSplitTerminal: (
+      callback: (data: {
+        tabId: string
+        paneRuntimeId: number
+        direction: 'horizontal' | 'vertical'
+        command?: string
+        telemetrySource?: TerminalPaneSplitSource
+      }) => void
+    ) => () => void
+    onRenameTerminal: (
+      callback: (data: { tabId: string; title: string | null }) => void
+    ) => () => void
+    onFocusTerminal: (
+      callback: (data: {
+        tabId: string
+        worktreeId: string
+        leafId?: string | null
+        ackPaneKeyOnSuccess?: string
+        flashFocusedPane?: boolean
+        scrollToBottomIfOutputSinceLastView?: boolean
+      }) => void
+    ) => () => void
+    onFocusEditorTab: (
+      callback: (data: { tabId: string; worktreeId: string }) => void
+    ) => () => void
+    onCloseSessionTab: (
+      callback: (data: { tabId: string; worktreeId: string }) => void
+    ) => () => void
+    onMoveSessionTab: (
+      callback: (data: { worktreeId: string } & RuntimeMobileSessionTabMove) => void
+    ) => () => void
+    onOpenFileFromMobile: (
+      callback: (data: { worktreeId: string; filePath: string; relativePath: string }) => void
+    ) => () => void
+    onOpenDiffFromMobile: (
+      callback: (data: {
+        worktreeId: string
+        filePath: string
+        relativePath: string
+        staged: boolean
+      }) => void
+    ) => () => void
+    onMobileMarkdownRequest: (
+      callback: (request: RuntimeMobileMarkdownRequest) => void
+    ) => () => void
+    respondMobileMarkdownRequest: (response: RuntimeMobileMarkdownResponse) => void
+    onCloseTerminal: (
+      callback: (data: { tabId: string; paneRuntimeId?: number }) => void
+    ) => () => void
+    onSleepWorktree: (callback: (data: { worktreeId: string }) => void) => () => void
+    onTerminalZoom: (callback: (direction: 'in' | 'out' | 'reset') => void) => () => void
+    readClipboardText: () => Promise<string>
+    readSelectionClipboardText: () => Promise<string>
+    saveClipboardImageAsTempFile: (args?: {
+      connectionId?: string | null
+    }) => Promise<string | null>
+    writeClipboardText: (text: string) => Promise<void>
+    writeSelectionClipboardText: (text: string) => Promise<void>
+    writeClipboardImage: (dataUrl: string) => Promise<void>
+    onFileDrop: (callback: (data: NativeFileDropPayload) => void) => () => void
+    getZoomLevel: () => number
+    setZoomLevel: (level: number) => void
+    syncTrafficLights: (zoomFactor: number) => void
+    setMarkdownEditorFocused: (focused: boolean) => void
+    setTerminalInputFocused: (focused: boolean) => void
+    setFloatingTerminalInputFocused: (focused: boolean) => void
+    setShortcutRecorderFocused: (focused: boolean) => void
+    onRichMarkdownContextCommand: (
+      callback: (payload: RichMarkdownContextMenuCommandPayload) => void
+    ) => () => void
+    onFullscreenChanged: (callback: (isFullScreen: boolean) => void) => () => void
+    minimize: () => void
+    maximize: () => void
+    isMaximized: () => Promise<boolean>
+    onMaximizeChanged: (callback: (isMaximized: boolean) => void) => () => void
+    requestClose: () => void
+    popupMenu: () => void
+    onWindowCloseRequested: (callback: (data: { isQuitting: boolean }) => void) => () => void
+    confirmWindowClose: () => void
+  }
+  runtime: {
+    syncWindowGraph: (graph: RuntimeSyncWindowGraph) => Promise<RuntimeSyncWindowGraphResult>
+    getStatus: () => Promise<RuntimeStatus>
+    call: (args: { method: string; params?: unknown }) => Promise<RuntimeRpcResponse<unknown>>
+    getTerminalFitOverrides: () => Promise<
+      { ptyId: string; mode: 'mobile-fit'; cols: number; rows: number }[]
+    >
+    getTerminalDrivers: () => Promise<
+      {
+        ptyId: string
+        driver: RuntimeTerminalDriverState
+      }[]
+    >
+    getBrowserDrivers: () => Promise<
+      {
+        browserPageId: string
+        driver: RuntimeBrowserDriverState
+      }[]
+    >
+    restoreTerminalFit: (ptyId: string) => Promise<{ restored: boolean }>
+    reclaimBrowserForDesktop: (browserPageId: string) => Promise<{ reclaimed: boolean }>
+    onTerminalFitOverrideChanged: (
+      callback: (event: {
+        ptyId: string
+        mode: 'mobile-fit' | 'desktop-fit'
+        cols: number
+        rows: number
+      }) => void
+    ) => () => void
+    onTerminalDriverChanged: (
+      callback: (event: { ptyId: string; driver: RuntimeTerminalDriverState }) => void
+    ) => () => void
+    onBrowserDriverChanged: (
+      callback: (event: { browserPageId: string; driver: RuntimeBrowserDriverState }) => void
+    ) => () => void
+  }
+  runtimeEnvironments: {
+    list: () => Promise<PublicKnownRuntimeEnvironment[]>
+    addFromPairingCode: (args: {
+      name: string
+      pairingCode: string
+    }) => Promise<{ environment: PublicKnownRuntimeEnvironment }>
+    resolve: (args: { selector: string }) => Promise<PublicKnownRuntimeEnvironment>
+    remove: (args: { selector: string }) => Promise<{ removed: PublicKnownRuntimeEnvironment }>
+    getStatus: (args: {
+      selector: string
+      timeoutMs?: number
+    }) => Promise<RuntimeRpcResponse<RuntimeStatus>>
+    call: (args: {
+      selector: string
+      method: string
+      params?: unknown
+      timeoutMs?: number
+    }) => Promise<RuntimeRpcResponse<unknown>>
+    subscribe: (
+      args: {
+        selector: string
+        method: string
+        params?: unknown
+        timeoutMs?: number
+      },
+      callbacks: {
+        onResponse: (response: RuntimeRpcResponse<unknown>) => void
+        onBinary?: (bytes: Uint8Array<ArrayBufferLike>) => void
+        onError?: (error: { code: string; message: string }) => void
+        onClose?: () => void
+      }
+    ) => Promise<RuntimeEnvironmentSubscriptionHandle>
+  }
+  rateLimits: {
+    get: () => Promise<RateLimitState>
+    refresh: () => Promise<RateLimitState>
+    refreshCodexForTarget: (target: RateLimitRuntimeTarget) => Promise<RateLimitState>
+    refreshClaudeForTarget: (target: RateLimitRuntimeTarget) => Promise<RateLimitState>
+    setPollingInterval: (ms: number) => Promise<void>
+    fetchInactiveClaudeAccounts: () => Promise<void>
+    fetchInactiveCodexAccounts: () => Promise<void>
+    onUpdate: (callback: (state: RateLimitState) => void) => () => void
+  }
+  ssh: {
+    listTargets: () => Promise<SshTarget[]>
+    addTarget: (args: { target: Omit<SshTarget, 'id'> }) => Promise<SshTarget>
+    updateTarget: (args: {
+      id: string
+      updates: Partial<Omit<SshTarget, 'id'>>
+    }) => Promise<SshTarget>
+    removeTarget: (args: { id: string }) => Promise<void>
+    importConfig: () => Promise<SshTarget[]>
+    connect: (args: { targetId: string }) => Promise<SshConnectionState | null>
+    disconnect: (args: { targetId: string }) => Promise<void>
+    terminateSessions: (args: { targetId: string }) => Promise<void>
+    resetRelay: (args: { targetId: string }) => Promise<void>
+    getState: (args: { targetId: string }) => Promise<SshConnectionState | null>
+    needsPassphrasePrompt: (args: { targetId: string }) => Promise<boolean>
+    testConnection: (args: {
+      targetId: string
+    }) => Promise<{ success: boolean; error?: string; state?: SshConnectionState }>
+    onStateChanged: (
+      callback: (data: { targetId: string; state: SshConnectionState }) => void
+    ) => () => void
+    addPortForward: (args: {
+      targetId: string
+      localPort: number
+      remoteHost: string
+      remotePort: number
+      label?: string
+    }) => Promise<PortForwardEntry>
+    updatePortForward: (args: {
+      id: string
+      targetId: string
+      localPort: number
+      remoteHost: string
+      remotePort: number
+      label?: string
+    }) => Promise<PortForwardEntry>
+    removePortForward: (args: { id: string }) => Promise<PortForwardEntry | null>
+    listPortForwards: (args?: { targetId?: string }) => Promise<PortForwardEntry[]>
+    listDetectedPorts: (args: { targetId: string }) => Promise<EnrichedDetectedPort[]>
+    onPortForwardsChanged: (
+      callback: (data: { targetId: string; forwards: PortForwardEntry[] }) => void
+    ) => () => void
+    onDetectedPortsChanged: (
+      callback: (data: { targetId: string; ports: EnrichedDetectedPort[] }) => void
+    ) => () => void
+    browseDir: (args: { targetId: string; dirPath: string }) => Promise<{
+      entries: { name: string; isDirectory: boolean }[]
+      resolvedPath: string
+    }>
+    onCredentialRequest: (
+      callback: (data: {
+        requestId: string
+        targetId: string
+        kind: 'passphrase' | 'password'
+        detail: string
+      }) => void
+    ) => () => void
+    onCredentialResolved: (callback: (data: { requestId: string }) => void) => () => void
+    submitCredential: (args: { requestId: string; value: string | null }) => Promise<void>
+  }
+  automations: {
+    list: () => Promise<Automation[]>
+    listRuns: (args?: { automationId?: string }) => Promise<AutomationRun[]>
+    listExternalManagers: () => Promise<ExternalAutomationManager[]>
+    listExternalRuns: (input: ExternalAutomationRunsInput) => Promise<ExternalAutomationRunsPage>
+    createExternal: (input: ExternalAutomationCreateInput) => Promise<void>
+    updateExternal: (input: ExternalAutomationUpdateInput) => Promise<void>
+    runExternalAction: (input: ExternalAutomationActionInput) => Promise<void>
+    create: (input: AutomationCreateInput) => Promise<Automation>
+    update: (args: { id: string; updates: AutomationUpdateInput }) => Promise<Automation>
+    delete: (args: { id: string }) => Promise<void>
+    runNow: (args: { id: string }) => Promise<AutomationRun>
+    runPrecheck: (args: {
+      automationId: string
+      runId: string
+    }) => Promise<AutomationPrecheckResult | null>
+    markDispatchResult: (result: AutomationDispatchResult) => Promise<AutomationRun>
+    snapshotWorkspaceName: (args: { workspaceId: string; displayName: string }) => Promise<number>
+    rendererReady: () => Promise<void>
+    onDispatchRequested: (callback: (request: AutomationDispatchRequest) => void) => () => void
+  }
+  wsl: {
+    isAvailable: () => Promise<boolean>
+    listDistros: () => Promise<string[]>
+  }
+  pwsh: {
+    isAvailable: () => Promise<boolean>
+  }
+  gitBash: {
+    isAvailable: () => Promise<boolean>
+  }
+  agentStatus: {
+    /** Listen for agent status updates forwarded from native hook receivers. */
+    onSet: (callback: (data: AgentStatusIpcPayload) => void) => () => void
+    /** Listen for main-process pane teardown that evicted a cached hook status. */
+    onClear: (callback: (data: { paneKey: string }) => void) => () => void
+    /** Return the current main-process hook cache after renderer hydration. */
+    getSnapshot: () => Promise<AgentStatusIpcPayload[]>
+    inferInterrupt: (request: AgentInterruptInferenceRequest) => Promise<boolean>
+    /** Listen for PTYs that still use a legacy numeric pane key but have
+     *  registry-backed UUID pane proof. */
+    onMigrationUnsupported: (callback: (entry: MigrationUnsupportedPtyEntry) => void) => () => void
+    onMigrationUnsupportedClear: (callback: (data: { ptyId: string }) => void) => () => void
+    getMigrationUnsupportedSnapshot: () => Promise<MigrationUnsupportedPtyEntry[]>
+    /** Drop a paneKey from the main-process hook cache and the on-disk
+     *  last-status file. Fire-and-forget. */
+    drop: (paneKey: string) => void
+  }
+  mobile: {
+    listNetworkInterfaces: () => Promise<{
+      interfaces: { name: string; address: string }[]
+    }>
+    getPairingQR: (args?: { address?: string; rotate?: boolean }) => Promise<
+      | { available: false }
+      | {
+          available: true
+          qrDataUrl: string
+          pairingUrl: string
+          endpoint: string
+          deviceId: string
+        }
+    >
+    getRuntimePairingUrl: (args?: { address?: string; rotate?: boolean }) => Promise<
+      | { available: false }
+      | {
+          available: true
+          pairingUrl: string
+          webClientUrl: string | null
+          endpoint: string
+          deviceId: string
+        }
+    >
+    listDevices: () => Promise<{
+      devices: { deviceId: string; name: string; pairedAt: number; lastSeenAt: number }[]
+    }>
+    revokeDevice: (args: { deviceId: string }) => Promise<{ revoked: boolean }>
+    listRuntimeAccessGrants: () => Promise<{ grants: RuntimeAccessGrant[] }>
+    revokeRuntimeAccess: (args: { deviceId: string }) => Promise<{ revoked: boolean }>
+    isWebSocketReady: () => Promise<{ ready: boolean; endpoint: string | null }>
+  }
+  speech: {
+    getCatalog: () => Promise<SpeechModelManifest[]>
+    getModelStates: () => Promise<SpeechModelState[]>
+    downloadModel: (modelId: string) => Promise<void>
+    cancelDownload: (modelId: string) => Promise<void>
+    deleteModel: (modelId: string) => Promise<void>
+    startDictation: (
+      modelId: string,
+      hotwords: string[] | undefined,
+      sessionId: string
+    ) => Promise<void>
+    feedAudio: (samples: Float32Array, sampleRate: number, sessionId?: string) => Promise<void>
+    stopDictation: (sessionId?: string) => Promise<void>
+    onPartialTranscript: (callback: (data: SpeechTranscriptEvent) => void) => () => void
+    onFinalTranscript: (callback: (data: SpeechTranscriptEvent) => void) => () => void
+    onDownloadProgress: (
+      callback: (data: { modelId: string; progress: number }) => void
+    ) => () => void
+    onReady: (callback: (data: SpeechLifecycleEvent) => void) => () => void
+    onStopped: (callback: (data: SpeechLifecycleEvent) => void) => () => void
+    onError: (callback: (data: SpeechErrorEvent) => void) => () => void
+  }
+}
+
+declare global {
+  // oxlint-disable-next-line typescript-eslint/consistent-type-definitions -- declaration merging requires interface
+  interface Window {
+    electron: ElectronAPI
+    api: PreloadApi
+  }
+}
